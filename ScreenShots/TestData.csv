@@ -1,0 +1,5 @@
+"rt","stimulus","response","trial_type","trial_index","time_elapsed","internal_node_id","text","condition"
+"1870","Welcome to the experiment. Press any key to begin."," ","html-keyboard-response","0","1871","0.0-0.0","",""
+"119506","[""img/circle_blue_1.png"",""img/circle_green_1.png""]","[""button_image-1""]","VoiceText","1","121421","0.0-1.0-0.0","[""No actually pass is a better word because what it does is that it creates a new strings yeah""]","diff"
+"50914","[""img/circle_blue_2.png"",""img/circle_green_2.png""]","[""button_image-1""]","VoiceText","2","172339","0.0-1.0-1.0","[""Asking you that with the prompt and the stimulus and then yeah and then you click on one of""]","easy"
+"13769","[""img/circle_blue_3.png"",""img/circle_green_3.png""]","[""button_image-2""]","VoiceText","3","186112","0.0-1.0-2.0","[""Again I was active know you say I don't know which one and then you say""]","easy"
