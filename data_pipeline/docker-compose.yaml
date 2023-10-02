@@ -1,0 +1,8 @@
+services:
+  speech2text:
+    init: true
+    build: .
+    volumes:
+      - ../output:/usr/src/app/output
+      - ../ressources:/usr/src/app/ressources
+

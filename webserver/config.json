@@ -1,0 +1,7 @@
+{
+    "SECRET_KEY" : "test",
+    "PATH_TO_RESSOURCES" : "/usr/src/app/ressources/",
+    "PATH_TO_RESSOURCES_SERVER" : "/usr/src/app/ressources/",
+    "PATH_TO_RESSOURCES_LOCAL" : "../ressources/",
+    "PORT": 8080
+}

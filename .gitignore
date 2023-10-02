@@ -1,0 +1,9 @@
+# exclude everything
+ressources/*
+# exception to the rule
+!ressources/.gitkeep
+
+# exclude everything
+output/*
+# exception to the rule
+!output/.gitkeep
