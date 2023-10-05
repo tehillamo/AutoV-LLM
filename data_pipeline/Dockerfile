@@ -13,5 +13,5 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-r
 
 COPY . .
 
-CMD [ "python", "speech2text.py" , "--path", "./ressources", "--transcribe", "--output-path", "./output"]
+CMD [ "python", "speech2text.py" , "--input-path", "./ressources", "--transcribe", "--output-path", "./output"]
 #CMD [ "python", "speech2text.py" , "-h"]

@@ -5,6 +5,7 @@ const cors = require('cors')
 const { v4: uuidv4 } = require('uuid');
 const config = require('./config.json');
 const fs = require('fs');
+const ffmpeg = require("fluent-ffmpeg");
 
 const app = express();
 app.use(cors());
@@ -55,7 +56,7 @@ app.post('/save', (req, res) => {
     uuid = uuidv4();
 
     // create directory
-    fs.mkdirSync(path.join(config.PATH_TO_RESSOURCES, uuid));
+    fs.mkdirSync(path.join(config.PATH_TO_RESSOURCES, uuid), 0o777);
 
     console.log("Save trial data")
     // save trial data
@@ -73,7 +74,23 @@ app.post('/save', (req, res) => {
         'base64'
     )
 
-    fs.writeFileSync(path.join(config.PATH_TO_RESSOURCES, uuid, 'audio.wav'), buffer);
+    fs.writeFileSync(path.join(config.PATH_TO_RESSOURCES, uuid, 'tmp.wav'), buffer);
+
+    // convert tmp.wav to mp3
+    var outStream = fs.createWriteStream(path.join(config.PATH_TO_RESSOURCES, uuid, 'audio.mp3'));
+    ffmpeg()
+        .input(path.join(config.PATH_TO_RESSOURCES, uuid, 'tmp.wav'))
+        .toFormat("mp3")
+        .on('error', error => console.log(`Encoding Error: ${error.message}`))
+        .on('exit', () => console.log('Audio recorder exited'))
+        .on('close', () => console.log('Audio recorder closed'))
+        .on('end', () => {
+            console.log('Audio Transcoding succeeded !')            
+            // delete audio.wav
+            fs.unlinkSync(path.join(config.PATH_TO_RESSOURCES, uuid, 'tmp.wav'));
+        })
+        .pipe(outStream, { end: true });
+    
 
     // save timestamps
     fs.writeFile(path.join(config.PATH_TO_RESSOURCES, uuid, 'timestamps.txt'), req.body.timestamps.toString(), function(err) {

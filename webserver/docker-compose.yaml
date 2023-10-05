@@ -2,6 +2,8 @@ services:
   web:
     init: true
     build: .
+    # change if needed (adjusts the permission of the generated folder)
+    user: 1000:1000
     ports:
       - "8000:8080"
     volumes:
