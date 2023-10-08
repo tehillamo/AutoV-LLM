@@ -25,16 +25,9 @@ app.get('/', (req, res) => {
  * POST HTTP method
  * save Recording, timestamps and trial data
  * 
- * For every request a uuid is generated. Then we create a directory with this name and save the recording (audio.wav) and timestamps (timestamps.txt)
+ * For every request a uuid is generated. Then we create a directory with this name and save the recording (audio.mp3) and timestamps (timestamps.txt)
  */
 app.post('/save', (req, res) => {
-    // Check authentication
-    if (!(req.get("auth") == config.SECRET_KEY) || req.get("auth") === undefined) {
-        console.log('Wrong secret')
-        res.status(403);
-        return res.send('Wrong secret');
-    }
-
     // Check if everything is present
     if (!req.body.audio) {
         console.log('Missing audio')

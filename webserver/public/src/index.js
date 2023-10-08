@@ -11,8 +11,7 @@ var jsPsych = initJsPsych({
 const trials = [
   {
     type: jsPsychSpeechRecording,
-    start: true,
-    auth_secret: 'test'
+    start: true
   },
   {
     type: jsPsychHtmlKeyboardResponse,

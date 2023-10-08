@@ -2,6 +2,8 @@ services:
   speech2text:
     init: true
     build: .
+    # change if needed (adjusts the permission of the generated folder)
+    # user: 1000:1000
     volumes:
       - ../output:/usr/src/app/output
       - ../ressources:/usr/src/app/ressources

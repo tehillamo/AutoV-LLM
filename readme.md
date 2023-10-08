@@ -8,15 +8,15 @@ Server for project
  - [Docker](https://docs.docker.com/engine/install/) and [Docker-Compose](https://docs.docker.com/compose/install/)
 
 ## Setup of experiment website and back-end server
- 1. Clone the git repository with `git clone <...>`
- 2. Run `cd <folder name>/webserver` to step into the project folder
- 3. Run `sudo docker-compose up -d` to start the docker container 
+ 1. Clone the git repository with `git clone https://github.com/tehillamo/LLM.git`
+ 2. Run `cd LLM/webserver` to step into the project folder
+ 3. Run `docker-compose up -d` to start the docker container 
  4. To stop the container use `sudo docker-compose stop`
 
 ## Setup of data-pipeline
- 1. Clone the git repository with `git clone <...>`
- 2. Run `cd <folder name>/data_pipeline` to step into the project folder
- 3. Run `sudo docker-compose up -d` to start the docker container 
+ 1. Clone the git repository with `git clone https://github.com/tehillamo/LLM.git`
+ 2. Run `cd LLM/data_pipeline` to step into the project folder
+ 3. Run `docker-compose up -d` to start the docker container 
  4. To stop the container use `sudo docker-compose stop`
 
 Note that you only need to clone the repository once.
@@ -28,8 +28,8 @@ Note that you only need to clone the repository once.
  - npm (>= 9.5.1), Node.js (>= 18.16.1), Python (>= 3.10)
 
 ## Setup of experiment website and back-end server
- 1. Clone the git repository with `git clone <...>`
- 2. Run `cd <folder name>/webserver` to step into the project folder
+ 1. Clone the git repository with `git clone https://github.com/tehillamo/LLM.git`
+ 2. Run `cd LLM/webserver` to step into the project folder
  3. Run `npm install` to install all dependencies
  4. Run `node server.js` to start the webserver
  5. Available in browser under `http:://localhost:8000`
@@ -37,8 +37,8 @@ Note that you only need to clone the repository once.
 
 
 ## Setup of data-pipeline
- 1. Clone the git repository with `git clone <...>`
- 2. Run `cd <folder name>/data_pipeline` to step into the project folder
+ 1. Clone the git repository with `git clone https://github.com/tehillamo/LLM.git`
+ 2. Run `cd LLM/data_pipeline` to step into the project folder
  3. Create a virtual environment with `python -m venv venv`
  4. Start virtual environment `source venv/bin/activate`
  5. Run `pip install -r requirements.txt` to install python dependencies
@@ -78,3 +78,12 @@ After that, we can run the study.
 jsPsych.run(trials);
 ```
 The implementation of the `jsPsychSpeechRecording` plugin can be found in `/webserver/public/jspsych/dist/plugin-recording.js` and `/webserver/public/jspsych/dist/plugin-recording-util.js`.
+
+# Ressources
+All recordings and the trial data will be saved to the `ressources` folder. Each participant has a unique id. For each participant we create a new folder inside `ressources`. In this folder you can find the whole recording, the timestamps which indicate when each trial started in ms, and the trial data.
+
+# Evaluation Script
+We provide different scripts to automatically evaluate the recordings of the verbal reports. In the following we explain each script and how to use it.
+
+## speech2text
+This scripts transcribes the recordings. Firstly, we cut each participant' audio into the different trials using the timestamps.

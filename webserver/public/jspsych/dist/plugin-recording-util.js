@@ -1,5 +1,3 @@
-let AUTH_SECRET = ""
-
 /**
  * Utility function for recording audio
  */
@@ -110,8 +108,8 @@ const sendAudioFile = (file, trial_data) => {
     const headers = {
         'Access-Control-Allow-Origin':'*',
         'Access-Control-Allow-Methods':'POST',
-        'Content-type': 'application/json',
-        'auth': AUTH_SECRET};
+        'Content-type': 'application/json'
+    };
     fetch('/save', {
       method: 'POST',
       headers: headers,

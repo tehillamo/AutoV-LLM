@@ -22,10 +22,6 @@ var jsPsychSpeechRecording = (function (jspsych) {
         start: {
           type: jspsych.ParameterType.BOOL,
           default: undefined,
-        },
-        auth_secret: {
-          type: jspsych.ParameterType.STRING,
-          default: "",
         }
 
       },
@@ -37,9 +33,6 @@ class SpeechRecording {
     }
     trial(display_element, trial) {
       if (trial.start === true) {  
-
-        AUTH_SECRET = trial.auth_secret;  
-
         audioRecorder.start()
         .then(() => {
             speechRecordingObject.startTime = Date.now();
