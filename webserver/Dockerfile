@@ -14,4 +14,4 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-r
 # Bundle app source
 COPY . .
 EXPOSE 8080
-CMD [ "node", "server.js" ]
+CMD [ "npm", "run", "production" ]

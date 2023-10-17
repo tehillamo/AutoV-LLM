@@ -53,7 +53,12 @@ class SpeechRecording {
       }
       
       if (trial.start === false) {
-        stopAudioRecording(this.jsPsych.data.allData.trials);
+        const response = confirm("Your voice recording will be saved. Do you want to continue?");
+        if (response === true) {
+          stopAudioRecording(this.jsPsych.data.allData.trials);
+        } else {
+          cancelAudioRecording();
+        }        
         this.jsPsych.finishTrial({}) 
       }    
     }    

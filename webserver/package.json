@@ -1,20 +1,24 @@
 {
   "dependencies": {
     "@jspsych/plugin-html-keyboard-response": "^1.1.2",
+    "chai": "^4.3.10",
+    "chai-http": "^4.4.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "fluent-ffmpeg": "^2.1.2",
     "jspsych": "^7.3.3",
     "lodash": "^4.17.21",
     "log-timestamp": "^0.3.0",
+    "mocha": "^10.2.0",
     "uuid": "^9.0.1"
   },
   "name": "jspsych",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "mocha --timeout 10000",
+    "production": "NODE_ENV=production node main.js",
+    "dev": "node main.js"
   },
   "keywords": [],
   "author": "",

@@ -133,8 +133,6 @@ function cancelAudioRecording() {
     console.log("Canceling audio...");
     //cancel the recording using the audio recording API
     audioRecorder.cancel();
- 
-    //Do something after audio recording is cancelled
 };
 
 const blobToBase64 = blob => {

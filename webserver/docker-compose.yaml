@@ -9,3 +9,4 @@ services:
     volumes:
       # sync ressources folder
       - ../ressources:/usr/src/app/ressources
+    restart: always

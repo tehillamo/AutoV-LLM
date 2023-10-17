@@ -1,0 +1,4 @@
+{
+    "PATH_TO_RESSOURCES" : "/usr/src/app/ressources/",
+    "PORT": 8080
+}
