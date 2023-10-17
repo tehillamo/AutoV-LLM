@@ -4,6 +4,7 @@ from argparse import ArgumentParser
 import csv
 import whisper
 import pandas as pd
+from utils import get_uuids
 
 class Speech2Text:
     def __init__(self, input_path, model):
@@ -92,8 +93,7 @@ class Speech2Text:
         :return: A pandas DataFrame containing the transcribed text for each audio file.
         """
         # find all uuids in ressource path
-        uuids = os.listdir(self.path)
-        uuids.remove('.gitkeep')
+        uuids = get_uuids(self.path)
         print('Splitting audio...')
         for uuid in uuids:
             # split all audios into trial recordings
@@ -103,8 +103,7 @@ class Speech2Text:
 
         print('Transcribing audio...')
 
-        uuids = os.listdir(self.path)
-        uuids.remove('.gitkeep')
+        uuids = get_uuids(self.path)
 
         df = pd.DataFrame(columns=['uuid', 'trial_number', 'transcribed_text'])
         # For each uuid transcribe all trial audio recordings
