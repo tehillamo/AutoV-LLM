@@ -3,13 +3,28 @@ require('log-timestamp')
 const path = require('path')
 const cors = require('cors')
 const { v4: uuidv4 } = require('uuid');
+const winston = require('winston');
+const { combine, timestamp, json } = winston.format;
 
 let config
 if (process.env.NODE_ENV === "production") {
     config = require('../config_production.json');
+    console.log('Using production config')
 } else {
     config = require('../config.json');
+    console.log('Using development config')
 }
+
+const logger = winston.createLogger({
+    level: 'info',
+    format: combine(timestamp(), json()),
+    transports: [
+        new winston.transports.File({
+          filename: path.join(config.PATH_TO_LOGS, 'app.log'),
+        }),
+    ],
+  });
+
 
 const fs = require('fs');
 const ffmpeg = require("fluent-ffmpeg");
@@ -37,17 +52,17 @@ app.get('/', (req, res) => {
 app.post('/save', (req, res) => {
     // Check if everything is present
     if (!req.body.audio) {
-        console.log('Missing audio')
+        logger.warn('Missing audio')
         res.status(400);
         return res.send('Missing audio');
     }
     if (!req.body.timestamps) {
-        console.log('Missing timestamps')
+        logger.warn('Missing timestamps')
         res.status(400);
         return res.send('Missing timestamps');
     }
     if (!req.body.trial_data) {
-        console.log('Missing trial_data')
+        logger.warn('Missing trial_data')
         res.status(400);
         return res.send('Missing trial_data');
     }
@@ -58,15 +73,15 @@ app.post('/save', (req, res) => {
     // create directory
     fs.mkdirSync(path.join(config.PATH_TO_RESSOURCES, uuid), 0o777);
 
-    console.log("Save trial data")
+    logger.info("Save trial data")
     // save trial data
     fs.writeFile(path.join(config.PATH_TO_RESSOURCES, uuid, 'trial_data.txt'), JSON.stringify(req.body.trial_data), function(err) {
         if(err) {
-            return console.log(err);
+            return logger.error(err);
         }
     })
 
-    console.log('Try to save recording');
+    logger.info('Try to save recording');
 
     // convert base 64 to wav and save it
     const buffer = Buffer.from(
@@ -81,11 +96,11 @@ app.post('/save', (req, res) => {
     ffmpeg()
         .input(path.join(config.PATH_TO_RESSOURCES, uuid, 'tmp.wav'))
         .toFormat("mp3")
-        .on('error', error => console.log(`Encoding Error: ${error.message}`))
-        .on('exit', () => console.log('Audio recorder exited'))
-        .on('close', () => console.log('Audio recorder closed'))
+        .on('error', error => logger.error(`Encoding Error: ${error.message}`))
+        .on('exit', () => logger.warn('Audio recorder exited'))
+        .on('close', () => logger.warn('Audio recorder closed'))
         .on('end', () => {
-            console.log('Audio Transcoding succeeded !')            
+            logger.info('Audio Transcoding succeeded !')            
             // delete tmp.wav
             fs.unlinkSync(path.join(config.PATH_TO_RESSOURCES, uuid, 'tmp.wav'));
         })
@@ -95,10 +110,10 @@ app.post('/save', (req, res) => {
     // save timestamps
     fs.writeFile(path.join(config.PATH_TO_RESSOURCES, uuid, 'timestamps.txt'), req.body.timestamps.toString(), function(err) {
         if(err) {
-            return console.log(err);
+            return logger.error(err);
         }
     }); 
-    console.log('Recording saved with uuid: ' + uuid);
+    logger.info('Recording saved with uuid: ' + uuid);
     res.status(200);
     return res.send('Recording saved with uuid: ' + uuid);
 });

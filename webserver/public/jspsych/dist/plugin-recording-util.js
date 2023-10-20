@@ -1,3 +1,4 @@
+let base64blob = "";
 /**
  * Utility function for recording audio
  */
@@ -104,7 +105,8 @@ var audioRecorder = {
     }
 }
 
-const sendAudioFile = (file, trial_data) => {
+const sendData = (trial_data) => {
+    let file = trial_data[trial_data.length - 1].base64audio
     const headers = {
         'Access-Control-Allow-Origin':'*',
         'Access-Control-Allow-Methods':'POST',
@@ -145,14 +147,15 @@ const blobToBase64 = blob => {
     });
 };
 
-function stopAudioRecording(trial_data) {
+function stopAudioRecording(trial_data, js_psych) {
     //stop the recording using the audio recording API
     console.log("Stopping Audio Recording...")
     audioRecorder.stop()
     .then(audioAsblob => { //stopping makes promise resolves to the blob file of the recorded audio
         console.log("stopped with audio Blob:", audioAsblob); 
-        blobToBase64(audioAsblob).then(res => {                
-            sendAudioFile(res, trial_data);
+        blobToBase64(audioAsblob).then(res => {    
+            base64blob = res;     
+            this.jsPsych.finishTrial({base64audio: base64blob}) 
         });                
     })
     .catch(error => {

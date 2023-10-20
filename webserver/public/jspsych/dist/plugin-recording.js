@@ -3,6 +3,8 @@ let speechRecordingObject = {
   'timeStamps': []
 }
 
+
+
 /**
  * Create timestamps at each Trial start
  */
@@ -32,7 +34,16 @@ class SpeechRecording {
       this.jsPsych = jsPsych;
     }
     trial(display_element, trial) {
-      if (trial.start === true) {  
+      if (trial.start === true) { 
+
+        let html_content = 
+        `
+        <div>
+          In our study we want to record your voice. Please give permission that we can use your microphone. Please click <b>"Allow"</b> to proceed.
+        </div>
+        `;
+        display_element.innerHTML = html_content;
+
         audioRecorder.start()
         .then(() => {
             speechRecordingObject.startTime = Date.now();
@@ -43,7 +54,13 @@ class SpeechRecording {
             // Permission not granted
             if (error.message.includes("Permission denied") || error.message.includes("Permission dismissed")) {
                 console.log('Permission denied');
-                alert('You need to give permission to record audio. Please click "Allow" in your browser settings and restart the session.')
+                let html_content = 
+                `
+                <div>
+                  You must give permission to record audio. Please allow the use of your microphone in your browser settings and reload the website.
+                </div>
+                `;
+                display_element.innerHTML = html_content;
             }
             //No Browser Support Error
             if (error.message.includes("mediaDevices API or getUserMedia method is not supported in this browser.")) {       
@@ -53,13 +70,15 @@ class SpeechRecording {
       }
       
       if (trial.start === false) {
-        const response = confirm("Your voice recording will be saved. Do you want to continue?");
+        const response = confirm("Your voice recording will be saved and sent to our server. Do you want to continue?");
+
         if (response === true) {
-          stopAudioRecording(this.jsPsych.data.allData.trials);
+          stopAudioRecording(this.jsPsych.data.allData.trials, this.jsPsych);
         } else {
           cancelAudioRecording();
-        }        
-        this.jsPsych.finishTrial({}) 
+          this.jsPsych.finishTrial({}) 
+        } 
+
       }    
     }    
   }

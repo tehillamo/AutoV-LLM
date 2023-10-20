@@ -5,6 +5,7 @@ var jsPsych = initJsPsych({
   on_finish: function() {
     console.log(jsPsych.data)
     jsPsych.data.displayData();
+    sendData(jsPsych.data.allData.trials);
   }
 });
 
@@ -16,7 +17,7 @@ const trials = [
   {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: 'Hello world 1!',
-    prompt: 'PLease press some key'
+    prompt: 'Please press some key'
   },
   {
     type: jsPsychHtmlKeyboardResponse,
@@ -46,3 +47,4 @@ const trials = [
 
 
 jsPsych.run(trials);
+

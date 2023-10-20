@@ -48,7 +48,7 @@ Note that you only need to clone the repository once.
  1. Clone the git repository with `git clone https://github.com/tehillamo/LLM.git`
  2. Run `cd LLM/webserver` to step into the project folder
  3. Run `npm install` to install all dependencies
- 4. Run `node server.js` to start the webserver
+ 4. Run `npm run dev` to start the webserver
  5. Available in browser under `http:://localhost:8000`
 
 
@@ -67,11 +67,14 @@ Note that you only need to clone the repository once.
 ---
 
 ## Create a Study using jsPsych with Automated Recording
-We use the [jsPsych](https://www.jspsych.org/) framework to run our study. You can specify the different trials in `/webserver/public/src/index.js`. To make use of the recordings you need to specify the first and last trial, as well as a callback function. To track the various trial times, it is necessary to initialize jsPsych with a trigger function.
+We use the [jsPsych](https://www.jspsych.org/) framework to run our study. You can specify the different trials in `/webserver/public/src/index.js`. To make use of the recordings you need to specify the first and last trial, as well as a callback function. To track the various trial times, it is necessary to initialize jsPsych with a trigger function. When the study has finished, we send the data to our server using `sendData();`
 ```js
 var jsPsych = initJsPsych({
   on_trial_start: function(trial) {
     onTrialStartRecording(trial);
+  },
+  on_finish: function() {
+    sendData(jsPsych.data.allData.trials);
   }
 });
 ```
@@ -80,8 +83,7 @@ Then we specify our trials. The first and last trial should both be `jsPsychSpee
 const trials = [
   {
     type: jsPsychSpeechRecording,
-    start: true,
-    auth_secret: 'test'
+    start: true
   },
     ...
   {
@@ -97,7 +99,7 @@ jsPsych.run(trials);
 The implementation of the `jsPsychSpeechRecording` plugin can be found in `/webserver/public/jspsych/dist/plugin-recording.js` and `/webserver/public/jspsych/dist/plugin-recording-util.js`.
 
 ## Ressources & Outputs
-All recordings and the trial data will be saved per default to the `ressources` folder. Each participant has a unique id. For each participant we create a new folder inside `ressources`. In this folder you can find the whole recording, the timestamps which indicate when each trial started in ms, and the trial data.
+All recordings and the trial data will be saved per default to the `ressources` folder. Each participant has a unique, random and anonymous id. For each participant we create a new folder inside `ressources`. In this folder you can find the whole recording, the timestamps which indicate when each trial started in ms, and the trial data.
 
 ## Evaluation Script
 We offer various scripts to automatically assess verbal report recordings. In the following sections, we describe each script's function and how to employ it.

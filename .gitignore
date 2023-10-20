@@ -7,3 +7,9 @@ ressources/*
 output/*
 # exception to the rule
 !output/.gitkeep
+
+# exclude everything
+logs/*
+# exception to the rule
+!logs/.gitkeep
+
