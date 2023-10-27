@@ -22,20 +22,20 @@ const logger = winston.createLogger({
     format: combine(timestamp(), json()),
     transports: [
         new winston.transports.File({
-          filename: path.join(config.PATH_TO_LOGS, 'app.log'),
+            filename: path.join(config.PATH_TO_LOGS, 'app.log'),
         }),
     ],
 });
 
 
 const fs = require('fs');
-const FfmpegCommand  = require("fluent-ffmpeg");
+const FfmpegCommand = require("fluent-ffmpeg");
 
 const app = express();
 app.use(cors());
 
 // set upload limit
-app.use(express.json({limit: '999mb'}));
+app.use(express.json({ limit: '999mb' }));
 
 // bind public folder
 app.use(express.static('public'))
@@ -77,50 +77,21 @@ app.post('/save', (req, res) => {
         'base64'
     )
 
-    tmp_filename = "tmp__" + uuidv4() + "__" + req.body.index + ".wav";
-    audio_filename = "audio_" + req.body.index + ".mp3";
     audio_filename = "audio_" + req.body.index + ".wav";
 
     uuid = req.body.uuid
     try {
-        //fs.writeFileSync(path.join(config.PATH_TO_RESSOURCES, uuid, tmp_filename), buffer);
         fs.writeFileSync(path.join(config.PATH_TO_RESSOURCES, uuid, audio_filename), buffer);
     } catch (error) {
         logger.warn(error)
         console.log(error)
         res.status(200);
-        return res.send({uuid: uuid});
+        return res.send({ uuid: uuid });
     }
-
-    // convert tmp.wav to mp3
-/*     var outStream = fs.createWriteStream(path.join(config.PATH_TO_RESSOURCES, uuid, audio_filename));
-    var command = new FfmpegCommand();
-    command
-        .input(path.join(config.PATH_TO_RESSOURCES, uuid, tmp_filename))
-        .toFormat("mp3")
-        .on('error', error => logger.error(`Encoding Error: ${error.message}`))
-        .on('exit', () => logger.warn('Audio recorder exited'))
-        .on('close', () => logger.warn('Audio recorder closed'))
-        .on('end', () => {
-            logger.info('Audio Transcoding succeeded !' + tmp_filename)    
-
-            // delete tmp.wav
-            try {
-                fs.unlinkSync(path.join(config.PATH_TO_RESSOURCES, uuid, tmp_filename));
-            } catch (error) {
-                logger.warn(error)
-                console.log(error)               
-            }
-            
-            logger.info('Recording saved with uuid: ' + uuid + " and index: " + req.body.index);
-            res.status(200);
-            return res.send({uuid: uuid});
-        })
-        .pipe(outStream, { end: true }); */
 
     logger.info('Recording saved with uuid: ' + uuid + " and index: " + req.body.index);
     res.status(200);
-    return res.send({uuid: uuid});
+    return res.send({ uuid: uuid });
 
 });
 
@@ -132,7 +103,7 @@ app.post('/createParticipant', (req, res) => {
     // create directory
     fs.mkdirSync(path.join(config.PATH_TO_RESSOURCES, uuid), 0o777);
 
-    return res.status(200).send({uuid: uuid});
+    return res.status(200).send({ uuid: uuid });
 });
 
 app.post('/saveTrialData', (req, res) => {
@@ -151,15 +122,21 @@ app.post('/saveTrialData', (req, res) => {
 
     logger.info("Save trial data for participant: " + uuid);
     // save trial data
-    fs.writeFile(path.join(config.PATH_TO_RESSOURCES, uuid, 'trial_data.txt'), JSON.stringify(req.body.trial_data), function(err) {
-        if(err) {
+    fs.writeFile(path.join(config.PATH_TO_RESSOURCES, uuid, 'trial_data.txt'), JSON.stringify(req.body.trial_data), function (err) {
+        if (err) {
             return logger.error(err);
         }
+
+        /* wav_files = listWavFiles(path.join(config.PATH_TO_RESSOURCES, uuid));
+        for (let i = 0; i < wav_files.length; i++) {
+            convert_audio(wav_files[i]);
+        } */
+
+        res.status(200);
+
+        return res.send({ uuid: uuid });
     })
 
-    res.status(200);
-
-    return res.send({uuid: uuid});
 });
 
 app.delete('/delete', (req, res) => {
@@ -173,8 +150,49 @@ app.delete('/delete', (req, res) => {
     fs.rmSync(path.join(config.PATH_TO_RESSOURCES, uuid), { recursive: true, force: true });
     res.status(200);
 
-    return res.send({uuid: uuid});
+    return res.send({ uuid: uuid });
 });
+
+function convert_audio(file) {
+    console.log(file)
+    new_filename = file.slice(0, -3) + "mp3"
+    var outStream = fs.createWriteStream(new_filename);
+    var command = new FfmpegCommand();
+    command
+        .input(file)
+        .toFormat("mp3")
+        .on('error', error => logger.error(`Encoding Error: ${error.message}`))
+        .on('exit', () => logger.warn('Audio recorder exited'))
+        .on('close', () => logger.warn('Audio recorder closed'))
+        .on('end', () => {
+            logger.info('Audio Transcoding succeeded !' + tmp_filename)
+
+            // delete tmp.wav
+            try {
+                fs.unlinkSync(file);
+            } catch (error) {
+                logger.warn(error)
+                console.log(error)
+            }
+        })
+        .pipe(outStream, { end: true });
+}
+
+function listWavFiles(directory) {
+    const wavFiles = [];
+    const files = fs.readdirSync(directory);
+
+    for (const file of files) {
+        const filePath = path.join(directory, file);
+        const stats = fs.statSync(filePath);
+
+        if (stats.isFile() && path.extname(file) === '.wav') {
+            wavFiles.push(filePath);
+        }
+    }
+
+    return wavFiles;
+}
 
 
 module.exports = app; // for testing
