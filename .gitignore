@@ -13,3 +13,5 @@ logs/*
 # exception to the rule
 !logs/.gitkeep
 
+test
+
