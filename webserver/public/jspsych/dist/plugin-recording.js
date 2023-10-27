@@ -9,10 +9,11 @@ let speechRecordingObject = {
  * Create timestamps at each Trial start
  */
 const onTrialStartRecording = function(trial) {
-  if (!(trial.type.info.name == 'SpeechRecording')) {
-    timeDifference = Date.now() - speechRecordingObject.startTime;
-    speechRecordingObject.timeStamps.push(timeDifference);    
-  }
+  startAudioRecording();
+}
+
+const onTrialFinishRecording = function(trial) {
+  stopAudioRecording(trial);
 }
 
 var jsPsychSpeechRecording = (function (jspsych) {
@@ -35,7 +36,6 @@ class SpeechRecording {
     }
     trial(display_element, trial) {
       if (trial.start === true) { 
-
         let html_content = 
         `
         <div>
@@ -43,40 +43,55 @@ class SpeechRecording {
         </div>
         `;
         display_element.innerHTML = html_content;
-
-        audioRecorder.start()
-        .then(() => {
-            speechRecordingObject.startTime = Date.now();
-            console.log("Recording Audio...")   
-            this.jsPsych.finishTrial({}) 
-        })    
-        .catch(error => { //on error
-            // Permission not granted
-            if (error.message.includes("Permission denied") || error.message.includes("Permission dismissed")) {
-                console.log('Permission denied');
-                let html_content = 
-                `
-                <div>
-                  You must give permission to record audio. Please allow the use of your microphone in your browser settings and reload the website.
-                </div>
-                `;
-                display_element.innerHTML = html_content;
+        const headers = {
+          'Access-Control-Allow-Origin':'*',
+          'Access-Control-Allow-Methods':'POST',
+          'Content-type': 'application/json'
+        };
+        fetch('/createParticipant', {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify({})
+        }).then(response => {
+            if (response.ok) {
+              response.json().then(data => {
+                uuid_jsRecording = data.uuid
+                this.jsPsych.finishTrial({}) 
+              });              
             }
-            //No Browser Support Error
-            if (error.message.includes("mediaDevices API or getUserMedia method is not supported in this browser.")) {       
-                console.log("To record audio, use browsers like Chrome and Firefox.");
-            }
-        });        
+            else throw Error(`Server returned ${response.status}: ${response.statusText}`)
+        })
+        .catch(err => {
+            console.log(err);
+        });    
       }
       
       if (trial.start === false) {
         const response = confirm("Your voice recording will be saved and sent to our server. Do you want to continue?");
 
         if (response === true) {
-          stopAudioRecording(this.jsPsych.data.allData.trials, this.jsPsych);
-        } else {
-          cancelAudioRecording();
           this.jsPsych.finishTrial({}) 
+        } else {
+          const headers = {
+            'Access-Control-Allow-Origin':'*',
+            'Access-Control-Allow-Methods':'POST',
+            'Content-type': 'application/json'
+          };
+          fetch('/delete', {
+            method: 'DELETE',
+            headers: headers,
+            body: JSON.stringify({uuid: uuid_jsRecording})
+          }).then(response => {
+              if (response.ok) {
+                cancelAudioRecording();
+                this.jsPsych.finishTrial({})              
+              }
+              else throw Error(`Server returned ${response.status}: ${response.statusText}`)
+          })
+          .catch(err => {
+              console.log(err);
+          });    
+          
         } 
 
       }    

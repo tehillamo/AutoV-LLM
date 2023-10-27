@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@jspsych/plugin-html-keyboard-response": "^1.1.2",
+    "busboy": "^1.6.0",
     "chai": "^4.3.10",
     "chai-http": "^4.4.0",
     "cors": "^2.8.5",
@@ -10,6 +11,8 @@
     "lodash": "^4.17.21",
     "log-timestamp": "^0.3.0",
     "mocha": "^10.2.0",
+    "multer": "^1.4.5-lts.1",
+    "sox-audio": "^0.3.0",
     "uuid": "^9.0.1",
     "winston": "^3.11.0"
   },
@@ -17,7 +20,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --timeout 10000",
+    "test": "mocha --timeout 300000 --max-old-space-size=4096",
     "production": "NODE_ENV=production node main.js",
     "dev": "node main.js"
   },

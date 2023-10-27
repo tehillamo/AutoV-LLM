@@ -1,4 +1,5 @@
 let base64blob = "";
+let uuid_jsRecording = "";
 /**
  * Utility function for recording audio
  */
@@ -62,7 +63,7 @@ var audioRecorder = {
             audioRecorder.mediaRecorder.addEventListener("stop", () => {
                 //create a single blob object, as we might have gathered a few Blob objects that needs to be joined as one
                 let audioBlob = new Blob(audioRecorder.audioBlobs, { type: mimeType });
-
+                //let audioBlob = new Blob(audioRecorder.audioBlobs, { type: "audio/mpeg" });
                 //resolve promise with the single audio blob representing the recorded audio
                 resolve(audioBlob);
             });
@@ -106,18 +107,18 @@ var audioRecorder = {
 }
 
 const sendData = (trial_data) => {
-    let file = trial_data[trial_data.length - 1].base64audio
+    console.log(trial_data)
+    console.log(uuid_jsRecording)
     const headers = {
         'Access-Control-Allow-Origin':'*',
         'Access-Control-Allow-Methods':'POST',
         'Content-type': 'application/json'
     };
-    fetch('/save', {
+    fetch('/saveTrialData', {
       method: 'POST',
       headers: headers,
       body: JSON.stringify({
-        audio: file,
-        timestamps: speechRecordingObject.timeStamps,
+        uuid: uuid_jsRecording,
         trial_data: trial_data.slice(1, -1)
       })
     }).then(response => {
@@ -129,6 +130,32 @@ const sendData = (trial_data) => {
         console.log(err);
     });
 };
+
+const sendAudio = (file, trial_index) => {
+    //console.log(uuid_jsRecording)
+    const headers = {
+        'Access-Control-Allow-Origin':'*',
+        'Access-Control-Allow-Methods':'POST',
+        'Content-type': 'application/json'
+    };
+    fetch('/save', {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        audio: file,
+        uuid: uuid_jsRecording,
+        index: trial_index
+      })
+    }).then(response => {
+        if (response.ok) return response;
+        else throw Error(`Server returned ${response.status}: ${response.statusText}`)
+    })
+    .catch(err => {
+        console.log(err);
+    });
+};
+
+
 
 
 function cancelAudioRecording() {
@@ -147,15 +174,15 @@ const blobToBase64 = blob => {
     });
 };
 
-function stopAudioRecording(trial_data, js_psych) {
+function stopAudioRecording(trial) {
     //stop the recording using the audio recording API
-    console.log("Stopping Audio Recording...")
+    //console.log("Stopping Audio Recording...")
     audioRecorder.stop()
     .then(audioAsblob => { //stopping makes promise resolves to the blob file of the recorded audio
-        console.log("stopped with audio Blob:", audioAsblob); 
+        //console.log("stopped with audio Blob:", audioAsblob); 
         blobToBase64(audioAsblob).then(res => {    
-            base64blob = res;     
-            this.jsPsych.finishTrial({base64audio: base64blob}) 
+            base64blob = res;   
+            sendAudio(res, trial.trial_index)
         });                
     })
     .catch(error => {
@@ -176,7 +203,7 @@ function startAudioRecording() {
     audioRecorder.start()
     .then(() => { //on success
         PERMISSION_AUDIO = true
-        console.log("Recording Audio...")    
+        //console.log("Recording Audio...")    
     })    
     .catch(error => { //on error
         //No Browser Support Error
@@ -186,5 +213,7 @@ function startAudioRecording() {
         if (error.message.includes("mediaDevices API or getUserMedia method is not supported in this browser.")) {       
             console.log("To record audio, use browsers like Chrome and Firefox.");
         }
-    });
+    }); 
 }
+
+

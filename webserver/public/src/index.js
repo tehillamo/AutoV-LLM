@@ -2,11 +2,15 @@ var jsPsych = initJsPsych({
   on_trial_start: function(trial) {
     onTrialStartRecording(trial);
   },
+  on_trial_finish: function(trial) {
+    onTrialFinishRecording(trial);
+  },
   on_finish: function() {
     console.log(jsPsych.data)
     jsPsych.data.displayData();
     sendData(jsPsych.data.allData.trials);
-  }
+  },
+
 });
 
 const trials = [
