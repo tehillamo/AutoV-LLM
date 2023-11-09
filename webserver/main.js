@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === "production") {
     config = require('./config.json');
 }
 
-cron.schedule('* * * * *', () => {
+cron.schedule(`${config.TIME_FOR_DELETION_TASK} * * * *`, () => {
     console.log('Running deletion task');
     deleteUnfinishedTrials(config.PATH_TO_RESSOURCES, config.MINUTES_TO_DELETE);
 });
