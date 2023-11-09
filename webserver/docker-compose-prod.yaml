@@ -1,0 +1,19 @@
+services:
+  web:
+    init: true
+    build: .
+
+    ports:
+      - "8000:8080"
+    volumes:
+      # sync ressources folder
+      - ../ressources:/usr/src/app/ressources
+      - ../logs:/usr/src/app/logs
+
+    networks:
+      - basenet
+    restart: always
+
+networks:
+  basenet:
+    external: true
