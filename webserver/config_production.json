@@ -1,5 +1,6 @@
 {
     "PATH_TO_RESSOURCES" : "/usr/src/app/ressources/",
     "PORT": 8080,
-    "PATH_TO_LOGS" : "/usr/src/app/logs/"
+    "PATH_TO_LOGS" : "/usr/src/app/logs/",
+    "MINUTES_TO_DELETE": 120
 }

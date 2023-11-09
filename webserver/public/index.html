@@ -1,15 +1,480 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Experiment</title>
+    <title>My experiment - Speech To Text</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" rel="stylesheet" type="text/css" /> 
     <script src="jspsych/dist/jspsych.js"></script>
-    <script src="jspsych/dist/plugin-html-keyboard-response.js"></script>
-    <script src="jspsych/dist/plugin-recording-util.js"></script>
-    <script src="jspsych/dist/plugin-recording.js"></script>   
-    <script src="src/index.js"></script>
-    <link href="jspsych/dist/jspsych.css" rel="stylesheet" type="text/css" />
-  </head>
-  <body>
-    index.html
-  </body>
+    <script src="jspsych/dist/plugin-image-keyboard-response.js"></script>
+    <script src="jspsych/dist/plugin-same-different-html.js"></script>
+    <script src="jspsych/dist/plugin-html-slider-response.js"></script>
+    <script src="jspsych/dist/plugin-html-keyboard-response.js"></script> 
+    <script src="jspsych/dist/plugin-recording.js"></script> 
+</head>
+
+<body></body>
+<script>
+
+
+    /* initialize jsPsych */
+    var jsPsych = initJsPsych({
+      on_finish: function() {
+        jsPsych.data.displayData();
+        jsPsych.data.get().localSave('csv','TestData.csv');
+        sendData(jsPsych.data.allData.trials);
+      },
+      on_trial_start: function(trial) {
+        onTrialStartRecording(trial);
+      },
+      on_trial_finish: function(trial) {
+        onTrialFinishRecording(trial);
+      }
+    });
+
+    /* create timeline */
+    var timeline = [];
+
+
+    //var practice_trial_text = '<p style= "margin-bottom: 50px; color:red; font-size:30px">This is a practice trial</p><br><br><br>'
+  
+
+
+var welcome = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: "Welcome to the experiment. Press any key to begin."
+  };
+//timeline.push(welcome);
+
+
+trial_data = [];
+
+
+// function that creates the list of objects which are the stimuli  
+function insertWordsToStructure(words) {
+    return words.map(word => ({
+        stimulus: `<p style="font-size:30px;">${word}</p>`
+    }));
+}
+
+// Example usage:
+var words_unrelated = ["ape", "bard", "bile", "blitz", "brink", "brook", "broth", "bruise", "bunt", "caste",
+                      "chalk", "cheat", "chess", "chick", "chop", "clam", "cloak", "clot", "clown", "cluck",
+                      "coop", "crook", "crumb", "darn", "dew", "doom", "drone", "dwarf", "elm", "farce",
+                      "feast", "fiend", "flare", "flaw", "float", "fuzz", "gasp", "geese", "gleam", "gloat",
+                      "goal", "gone", "grime", "grove", "halt", "haste", "haul", "heed", "heist", "hum",
+                      "jolt", "jute", "lamb", "lark", "leak", "leer", "loaf", "mace", "mash", "meal",
+                      "meat", "mime", "moat", "moot", "mute", "nark", "neap", "need", "pale", "peal",
+                      "peel", "pout", "prize", "prose", "prove", "punt", "roam", "rove", "shout", "shove",
+                      "slope", "sloth", "slot", "spat", "spew", "spout", "spume", "streak", "stroke", "swim",
+                      "tilt", "toot", "trope", "veal", "weal", "wilt", "woof", "wool", "yarn", "zoom"]
+
+var words_cities = ["sydney", "los angeles", "bucharest", "chicago", "auckland",
+                      "london", "tokyo", "delhi", "mumbai", "shanghai", "moscow", 
+                      "seoul", "new york", "hanoi", "bangkok", "berlin", "madrid", 
+                      "amsterdam", "athens", "baghdad", "beirut", "cairo", "budapest",
+                      "copenhagen", "dublin", "helsinki", "jakarta", "jerusalem",     
+                      "kiev", "lisbon", "manila", "oslo", "ottawa", "paris","prague", 
+                      "rome", "stockholm", "taipei", "jordan", "istanbul", "toronto",
+                      "munich", "kyoto", "seattle", "beijing", "barcelona", "brussels", "dubai"];
+
+var words_countries = ["Canada", "France", "Mexico", "England", "Germany", 
+                      "Spain", "Italy", "China", "Japan", "Russia", 
+                      "Brazil", "Ireland", "Australia", "Iraq", "Finland", 
+                      "Argentina", "India", "Switzerland", "Sweden", "Africa", 
+                      "Chile", "Britain", "Iran", "Portugal", "Greece", 
+                      "Scotland", "Egypt", "Israel", "Peru", "Belgium", 
+                      "Korea", "Norway", "Denmark", "Lebanon", "Malaysia", 
+                      "Poland", "Taiwan", "Romania", "Serbia", "Singapore", 
+                      "Indonesia", "Taiwan", "Turkey", "Vietnam", "Thailand", 
+                      "Philippines", "Pakistan", "Netherlands"];
+
+var words_body = ["leg", "arm", "nail", "muscle", "feet", "finger", "head", 
+                  "toe", "eye", "hand", "nose", "ear", "mouth", "stomach", 
+                  "heart", "knee", "neck", "brain", "hair", "elbow", 
+                  "shoulder", "chest", "spine", "hip", "lip", "thigh", 
+                  "ankle", "face", "liver", "lung", "tongue", "teeth", 
+                  "torso", "wrist", "bone", "palm", "forearm", "eyebrow", 
+                  "throat", "earlobe", "jaw", "nostril", "forehead", 
+                  "knuckle", "heel", "skin", "cheeks", "eyelid"]
+
+
+var study_list_unrelated = insertWordsToStructure(words_unrelated);
+var study_list_cities = insertWordsToStructure(words_cities);
+var study_list_countries = insertWordsToStructure(words_countries);
+var study_list_body = insertWordsToStructure(words_body);
+
+////////////////////////////////
+/// Memory Task - Study List ///
+////////////////////////////////
+cities_list_html = [];
+countires_list_html = [];
+body_list_html = [];
+unrelated_list_html = [];
+
+for (let i = 0; i < 32; i++) {
+  //console.log("i cities", i)
+  cities_list_html.push(
+    study_list_cities[i]
+  );
+}
+
+for (let i = 0; i < 32; i++) {
+  //console.log("i unrelated", i)
+  unrelated_list_html.push(
+    study_list_unrelated[i]
+  );
+}
+
+
+for (let i = 0; i < 32; i++) {
+  //console.log("i countries", i)
+  countires_list_html.push(
+    study_list_countries[i]
+  );
+}
+
+for (let i = 0; i < 32; i++) {
+  //console.log("i countries", i)
+  body_list_html.push(
+    study_list_body[i]
+  );
+}
+
+
+var fixation = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: '<div style="font-size:60px;">+</div>',
+  choices: "NO_KEYS",
+  trial_duration: 1500,
+};
+
+function sampleRandomly20(arr, count) {
+    const shuffled = arr.slice().sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+}
+
+
+cities_20array = sampleRandomly20(study_list_cities, 8)  
+countries_20array = sampleRandomly20(study_list_countries, 8)  
+body_20array = sampleRandomly20(study_list_body, 8)  
+random_20array = sampleRandomly20(study_list_unrelated, 8)   
+
+let array_cities = Object.values(cities_20array);
+let array_countries = Object.values(countries_20array);
+let array_body = Object.values(body_20array);
+let array_unrelated = Object.values(random_20array);
+
+var cities_list = array_cities.concat(array_unrelated);
+var countries_list = array_countries.concat(array_unrelated);
+var body_list = array_body.concat(array_unrelated);
+
+var test = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: jsPsych.timelineVariable('stimulus'),
+  trial_duration: 1200,
+  choices: "NO_KEYS"
+}
+
+var test_procedure_cities = {
+  timeline: [fixation, test],
+  timeline_variables: cities_list,
+  randomize_order: true
+}
+
+var test_procedure_coutries = {
+  timeline: [fixation, test],
+  timeline_variables: countries_list,
+  randomize_order: true
+}
+
+var test_procedure_body = {
+  timeline: [fixation, test],
+  timeline_variables: body_list,
+  randomize_order: true
+}
+
+
+
+/////////////////////
+// N-Back Task /////
+////////////////////
+
+var n = [
+  {n: "<p style=\"font-size:30px;\">3</p>"},
+  {n: "<p style=\"font-size:30px;\">1</p>"},
+  {n: "<p style=\"font-size:30px;\">2</p>"},
+  {n: "<p style=\"font-size:30px;\">1</p>"},
+  {n: "<p style=\"font-size:30px;\">3</p>"},
+  {n: "<p style=\"font-size:30px;\">1</p>"},
+  {n: "<p style=\"font-size:30px;\">2</p>"},
+  {n: "<p style=\"font-size:30px;\">1</p>"},
+]
+
+var n_back = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: jsPsych.timelineVariable('n'),
+  trial_duration: 100,
+  choices: ["k", "d"]
+}
+
+var n_back_procedure = {
+  timeline: [fixation, n_back],
+  timeline_variables: n,
+  randomize_order: false
+}
+
+
+var n_back_intro = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: "Press the space key to begin the next (n-back) task",
+    choices: ["Enter"]
+  };
+
+  var new_list = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: "press the space key to begin the next memory task",
+    choices: ["Enter"]
+  };
+
+
+////////////////////////////////
+/// Memory Task - Test List ///
+////////////////////////////////
+
+// full list of new words
+var filteredArray_random = study_list_unrelated.filter(item => !random_20array.includes(item));
+var Sample_random_new = sampleRandomly20(filteredArray_random, 8)
+
+var filteredArray_cities = study_list_cities.filter(item => !cities_20array.includes(item));
+var Cities_random_new = sampleRandomly20(filteredArray_cities, 8)
+
+var filteredArray_countries = study_list_countries.filter(item => !countries_20array.includes(item));
+var Countries_random_new = sampleRandomly20(filteredArray_countries, 8)
+
+var filteredArray_body = study_list_body.filter(item => !body_20array.includes(item));
+var Body_random_new = sampleRandomly20(filteredArray_body, 8)
+
+// sample of old words 
+var cities_randomSample_old = sampleRandomly20(cities_20array, 8)
+var countries_randomSample_old = sampleRandomly20(countries_20array, 8)
+var body_randomSample_old = sampleRandomly20(body_20array, 8)
+var random_randomSample_old = sampleRandomly20(random_20array, 8)
+
+var cities_pairs = [];
+var cityNew_unrelatedOld_pairs = [];
+var cityOld_unrelatedNew_pairs = [];
+var unrelatedOld_unrelatedNew_pairs = [];
+var relatedNew_relatedNew_pairs = [];
+var unrelatedNew_unrelatedNew_pairs = [];
+var countries_combinedTexts = [];
+var body_combinedTexts = [];
+
+// shuffeling function for the location of the stimuli on the scales
+function shuffleWords(word1, word2) {
+          return Math.random() > 0.5 ? [word1, word2] : [word2, word1];
+        }
+
+
+var cities_first = []; 
+var cities_second= []; 
+var cities_pairs = [];
+
+var body_first = []; 
+var body_second= []; 
+var body_pairs = [];
+
+for (let g = 0; g < 8; g++) {
+  console.log("g", g)
+  //// Cities VS. Unrelated
+  // R1 vs. R0
+    var cities_matched_old = cities_randomSample_old[g].stimulus.match(/>([^<]+)</);
+    var cities_old = cities_matched_old ? cities_matched_old[1] : '';
+    var cities_matched_new = Cities_random_new[g].stimulus.match(/>([^<]+)</);
+    var cities_new = cities_matched_new ? cities_matched_new[1] : '';
+  // R0 vs. U1
+    var cities_matched_new = Cities_random_new[g].stimulus.match(/>([^<]+)</);
+    var cities_new = cities_matched_new ? cities_matched_new[1] : '';
+    var random_matched_old = random_randomSample_old[g].stimulus.match(/>([^<]+)</);
+    var random_old = random_matched_old ? random_matched_old[1] : ''; 
+  // R1 vs. U0
+    var cities_matched_old = cities_randomSample_old[g].stimulus.match(/>([^<]+)</);
+    var cities_old = cities_matched_old ? cities_matched_old[1] : '';
+    var random_matched_new = Sample_random_new[g].stimulus.match(/>([^<]+)</);
+    var random_new = random_matched_new ? random_matched_new[1] : ''; 
+  // U1 vs. U0
+    var random_matched_old = random_randomSample_old[g].stimulus.match(/>([^<]+)</);
+    var random_old = random_matched_old ? random_matched_old[1] : '';
+    var random_matched_new = Sample_random_new[g].stimulus.match(/>([^<]+)</);
+    var random_new = random_matched_new ? random_matched_new[1] : ''; 
+
+
+    cities_first.push(cities_old, cities_new, cities_old, random_old)
+    cities_second.push(cities_new, random_old, random_new, random_new)
+
+
+  //// Body VS. Unrelated
+  // R1 vs. R0
+    var body_matched_old = body_randomSample_old[g].stimulus.match(/>([^<]+)</);
+    var body_old = body_matched_old ? body_matched_old[1] : '';
+    var body_matched_new = Body_random_new[g].stimulus.match(/>([^<]+)</);
+    var body_new = body_matched_new ? body_matched_new[1] : '';
+  // R0 vs. U1
+    var body_matched_new = Body_random_new[g].stimulus.match(/>([^<]+)</);
+    var body_new = body_matched_new ? body_matched_new[1] : '';
+    var random_matched_old = random_randomSample_old[g].stimulus.match(/>([^<]+)</);
+    var random_old = random_matched_old ? random_matched_old[1] : ''; 
+  // R1 vs. U0
+    var body_matched_old = body_randomSample_old[g].stimulus.match(/>([^<]+)</);
+    var body_old = body_matched_old ? body_matched_old[1] : '';
+    var random_matched_new = Sample_random_new[g].stimulus.match(/>([^<]+)</);
+    var random_new = random_matched_new ? random_matched_new[1] : ''; 
+  // U1 vs. U0
+    var random_matched_old = random_randomSample_old[g].stimulus.match(/>([^<]+)</);
+    var random_old = random_matched_old ? random_matched_old[1] : '';
+    var random_matched_new = Sample_random_new[g].stimulus.match(/>([^<]+)</);
+    var random_new = random_matched_new ? random_matched_new[1] : ''; 
+
+
+    body_first.push(body_old, body_new, body_old, random_old)
+    body_second.push(body_new, random_old, random_new, random_new)
+
+
+}
+
+for (let h = 0; h <32; h++) {
+console.log("h", h)
+ var [displayedFirstWord, displayedSecondWord] = shuffleWords(cities_first[h], cities_second[h]);
+  var htmlString = `<div style="width:500px;">
+                <p>Which one of the words presented is 'old'?</p>
+                <div style="width:240px; float: left;">
+                    <p>${displayedFirstWord}</p>
+                </div>
+                <div style="width:240px; float: right;">
+                    <p>${displayedSecondWord}</p>
+                </div>
+            </div>`;
+
+    cities_pairs.push({
+        slider: htmlString
+    });
+}
+
+
+for (let k = 0; k <32; k ++) {
+console.log("k", k)
+ var [displayedFirstWord, displayedSecondWord] = shuffleWords(body_first[k], body_second[k]);
+  var htmlString = `<div style="width:500px;">
+                <p>Which one of the words presented is 'old'?</p>
+                <div style="width:240px; float: left;">
+                    <p>${displayedFirstWord}</p>
+                </div>
+                <div style="width:240px; float: right;">
+                    <p>${displayedSecondWord}</p>
+                </div>
+            </div>`;
+
+    body_pairs.push({
+        slider: htmlString
+    });
+}
+
+
+
+// 4 trials U0 vs. U0 = unrelated unseen vs. unrelated unseen = random new vs. random new 
+for (let m = 0; m < 4; m++) {
+  console.log(m)
+    var random_matched_new = Sample_random_new[m].stimulus.match(/>([^<]+)</);
+    var random_new = random_matched_new ? random_matched_new[1] : '';
+    
+    var random_matched_new_2 = Sample_random_new[m+1].stimulus.match(/>([^<]+)</);
+    var random_new_2 = random_matched_new_2 ? random_matched_new_2[1] : ''; 
+
+    const isRandom = Math.random() >= 0.5;
+
+      var firstText = isRandom ?  random_new: random_new_2;
+      var secondText = isRandom ? random_new_2: random_new;
+
+      var firstWord = firstText.split(',')[0].trim();
+      var secondWord = secondText.split(',')[0].trim();
+
+      var [displayedFirstWord, displayedSecondWord] = shuffleWords(firstWord, secondWord);
+
+      var htmlString = `
+          <div style="width:500px;">
+              <p>Which one of the words presented is 'old'?</p>
+              <div style="width:240px; float: left;">
+                  <p>${displayedFirstWord}</p>
+              </div>
+              <div style="width:240px; float: right;">
+                  <p>${displayedSecondWord}</p>
+              </div>
+          </div>
+      `;
+
+      unrelatedNew_unrelatedNew_pairs.push({
+      slider: htmlString
+      });
+}
+
+
+
+var trial_slider = {
+    type: jsPsychHtmlSliderResponse,
+    stimulus: jsPsych.timelineVariable('slider'),
+    require_movement: true,
+    slider_start: 0,
+    min:-50, 
+    max:50,
+    labels: ['100% sure old', 'completely unsure', '100% sure old'],
+};
+
+
+var cities_testPhase = {
+  timeline: [fixation, trial_slider],
+  timeline_variables: cities_pairs,
+  randomize_order: true
+}
+
+var body_testPhase = {
+  timeline: [fixation, trial_slider],
+  timeline_variables: body_pairs,
+  randomize_order: true
+}
+
+var slide_procedure_U0U0 = {
+  timeline: [fixation, trial_slider],
+  timeline_variables: unrelatedNew_unrelatedNew_pairs,
+  randomize_order: true
+}
+
+
+var slide_procedure_R0R0 = {
+  timeline: [fixation, trial_slider],
+  timeline_variables: relatedNew_relatedNew_pairs,
+  randomize_order: true
+}
+
+
+
+
+// or via description of the difficulty 
+timeline = [ 
+  {
+    type: jsPsychSpeechRecording,
+    start: true
+  },
+  welcome, test_procedure_body, n_back_intro, n_back_procedure, body_testPhase,
+                     test_procedure_cities, n_back_intro, n_back_procedure, cities_testPhase,
+  {
+    type: jsPsychSpeechRecording,
+    start: false
+  }]
+
+
+jsPsych.run(timeline);
+
+
+</script>
+
 </html>

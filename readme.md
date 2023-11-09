@@ -67,11 +67,14 @@ Note that you only need to clone the repository once.
 ---
 
 ## Create a Study using jsPsych with Automated Recording
-We use the [jsPsych](https://www.jspsych.org/) framework to run our study. You can specify the different trials in `/webserver/public/src/index.js`. To make use of the recordings you need to specify the first and last trial, as well as a callback function. To track the various trial times, it is necessary to initialize jsPsych with a trigger function. When the study has finished, we send the data to our server using `sendData();`
+We use the [jsPsych](https://www.jspsych.org/) framework to run our study. You can specify the different trials in `/webserver/public/src/index.js`. To make use of the recordings you need to specify the first and last trial, as well as a callback function. To track the trials, it is necessary to initialize jsPsych with a trigger functions. `onTrialStartRecording(trial);` starts the recording as `onTrialFinishRecording(trial);` ends the recording of this trial and sends it to our server. When the study has finished, we send the data to our server using `sendData();`.
 ```js
 var jsPsych = initJsPsych({
   on_trial_start: function(trial) {
     onTrialStartRecording(trial);
+  },
+  on_trial_finish: function(trial) {
+    onTrialFinishRecording(trial);
   },
   on_finish: function() {
     sendData(jsPsych.data.allData.trials);
@@ -96,7 +99,7 @@ After that, we can run the study.
 ```js
 jsPsych.run(trials);
 ```
-The implementation of the `jsPsychSpeechRecording` plugin can be found in `/webserver/public/jspsych/dist/plugin-recording.js` and `/webserver/public/jspsych/dist/plugin-recording-util.js`.
+The implementation of the `jsPsychSpeechRecording` plugin can be found in `/webserver/public/jspsych/dist/plugin-recording.js`. Note that you must include the script in the html file.
 
 ## Ressources & Outputs
 All recordings and the trial data will be saved per default to the `ressources` folder. Each participant has a unique, random and anonymous id. For each participant we create a new folder inside `ressources`. In this folder you can find the whole recording, the timestamps which indicate when each trial started in ms, and the trial data.

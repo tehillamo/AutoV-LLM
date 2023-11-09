@@ -7,6 +7,8 @@ const winston = require('winston');
 const { combine, timestamp, json } = winston.format;
 
 
+
+
 let config
 if (process.env.NODE_ENV === "production") {
     config = require('../config_production.json');
@@ -45,6 +47,8 @@ app.use(express.static('public'))
 app.get('/', (req, res) => {
     res.send();
 });
+
+
 
 /**
  * POST HTTP method
@@ -193,6 +197,8 @@ function listWavFiles(directory) {
 
     return wavFiles;
 }
+
+
 
 
 module.exports = app; // for testing
