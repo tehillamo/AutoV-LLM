@@ -1,7 +1,7 @@
 {
     "PATH_TO_RESSOURCES" : "../ressources/",
     "PORT": 8080,
-    "PATH_TO_LOGS": "../logs/",
+    "PATH_TO_LOGS": "./logs/",
     "MINUTES_TO_DELETE": 120,
     "TIME_FOR_DELETION_TASK": "0,15,30,45"
 }

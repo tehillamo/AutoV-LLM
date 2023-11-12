@@ -3,8 +3,7 @@ require('log-timestamp')
 const path = require('path')
 const cors = require('cors')
 const { v4: uuidv4 } = require('uuid');
-const winston = require('winston');
-const { combine, timestamp, json } = winston.format;
+const logger = require('winston')
 
 
 
@@ -19,15 +18,6 @@ if (process.env.NODE_ENV === "production") {
 }
 
 
-const logger = winston.createLogger({
-    level: 'info',
-    format: combine(timestamp(), json()),
-    transports: [
-        new winston.transports.File({
-            filename: path.join(config.PATH_TO_LOGS, 'app.log'),
-        }),
-    ],
-});
 
 
 const fs = require('fs');
@@ -197,9 +187,6 @@ function listWavFiles(directory) {
 
     return wavFiles;
 }
-
-
-
 
 module.exports = app; // for testing
 

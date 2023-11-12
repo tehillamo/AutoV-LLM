@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const logger = require('winston')
 
 
 /**
@@ -47,6 +48,7 @@ function deleteOldFiles(directory, minutes) {
     const now = Date.now();
     fs.readdir(directory, (err, files) => {
         if (err) {
+            logger.warn(error)
             console.error(err);
             return;
         }
@@ -56,6 +58,7 @@ function deleteOldFiles(directory, minutes) {
             return new Promise((resolve, reject) => {
                 fs.stat(filePath, (err, stats) => {
                     if (err) {
+                        logger.warn(err)
                         console.error(err);
                         reject(err);
                         return;
@@ -78,14 +81,16 @@ function deleteOldFiles(directory, minutes) {
                 if (shouldDeleteFolder && !files.includes("trial_data.txt")) {
                     fs.rm(directory, { recursive: true }, err => {
                         if (err) {
+                            logger.warn(err)
                             console.error(err);
                             return;
                         }
-                        console.log(`Deleted ${directory}`);
+                        logger.info(`Deleted ${directory}`)
                     });
                 }
             })
             .catch(err => {
+                logger.warn(err)
                 console.error(err);
             });
     });
