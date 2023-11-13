@@ -9,7 +9,7 @@
     <script src="jspsych/dist/plugin-image-keyboard-response.js"></script>
     <script src="jspsych/dist/plugin-same-different-html.js"></script>
     <script src="jspsych/dist/plugin-html-slider-response.js"></script>
-    <script src="jspsych/dist/plugin-html-keyboard-response.js"></script> 
+    <script src="jspsych/dist/plugin-html-keyboard-response.js"></script>  
     <script src="jspsych/dist/plugin-recording.js"></script> 
 </head>
 
@@ -32,32 +32,28 @@
       }
     });
 
-    /* create timeline */
+/* create timeline */
     var timeline = [];
-
-
-    //var practice_trial_text = '<p style= "margin-bottom: 50px; color:red; font-size:30px">This is a practice trial</p><br><br><br>'
-  
 
 
 var welcome = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: "Welcome to the experiment. Press any key to begin."
   };
-//timeline.push(welcome);
+
 
 
 trial_data = [];
 
 
-// function that creates the list of objects which are the stimuli  
+// function that creates the list of stimuli (i.e., a <p> tag around each word) 
 function insertWordsToStructure(words) {
     return words.map(word => ({
         stimulus: `<p style="font-size:30px;">${word}</p>`
     }));
 }
 
-// Example usage:
+// List of unrelated words:
 var words_unrelated = ["ape", "bard", "bile", "blitz", "brink", "brook", "broth", "bruise", "bunt", "caste",
                       "chalk", "cheat", "chess", "chick", "chop", "clam", "cloak", "clot", "clown", "cluck",
                       "coop", "crook", "crumb", "darn", "dew", "doom", "drone", "dwarf", "elm", "farce",
@@ -69,6 +65,7 @@ var words_unrelated = ["ape", "bard", "bile", "blitz", "brink", "brook", "broth"
                       "slope", "sloth", "slot", "spat", "spew", "spout", "spume", "streak", "stroke", "swim",
                       "tilt", "toot", "trope", "veal", "weal", "wilt", "woof", "wool", "yarn", "zoom"]
 
+// List of cities:
 var words_cities = ["sydney", "los angeles", "bucharest", "chicago", "auckland",
                       "london", "tokyo", "delhi", "mumbai", "shanghai", "moscow", 
                       "seoul", "new york", "hanoi", "bangkok", "berlin", "madrid", 
@@ -78,6 +75,7 @@ var words_cities = ["sydney", "los angeles", "bucharest", "chicago", "auckland",
                       "rome", "stockholm", "taipei", "jordan", "istanbul", "toronto",
                       "munich", "kyoto", "seattle", "beijing", "barcelona", "brussels", "dubai"];
 
+// List of countries:
 var words_countries = ["Canada", "France", "Mexico", "England", "Germany", 
                       "Spain", "Italy", "China", "Japan", "Russia", 
                       "Brazil", "Ireland", "Australia", "Iraq", "Finland", 
@@ -89,6 +87,7 @@ var words_countries = ["Canada", "France", "Mexico", "England", "Germany",
                       "Indonesia", "Taiwan", "Turkey", "Vietnam", "Thailand", 
                       "Philippines", "Pakistan", "Netherlands"];
 
+// List of body parts:
 var words_body = ["leg", "arm", "nail", "muscle", "feet", "finger", "head", 
                   "toe", "eye", "hand", "nose", "ear", "mouth", "stomach", 
                   "heart", "knee", "neck", "brain", "hair", "elbow", 
@@ -99,28 +98,32 @@ var words_body = ["leg", "arm", "nail", "muscle", "feet", "finger", "head",
                   "knuckle", "heel", "skin", "cheeks", "eyelid"]
 
 
+// Create the list of stimuli
 var study_list_unrelated = insertWordsToStructure(words_unrelated);
 var study_list_cities = insertWordsToStructure(words_cities);
 var study_list_countries = insertWordsToStructure(words_countries);
 var study_list_body = insertWordsToStructure(words_body);
 
+
+
 ////////////////////////////////
-/// Memory Task - Study List ///
+/// Memory Task - Study Phase ///
 ////////////////////////////////
+
+// create empty objects to hold the stimuli.
 cities_list_html = [];
 countires_list_html = [];
 body_list_html = [];
 unrelated_list_html = [];
 
+// loop to fill up the empty objects, each of the length 32 (i.e., participants learn about 32 words of each list)
 for (let i = 0; i < 32; i++) {
-  //console.log("i cities", i)
   cities_list_html.push(
     study_list_cities[i]
   );
 }
 
 for (let i = 0; i < 32; i++) {
-  //console.log("i unrelated", i)
   unrelated_list_html.push(
     study_list_unrelated[i]
   );
@@ -128,33 +131,33 @@ for (let i = 0; i < 32; i++) {
 
 
 for (let i = 0; i < 32; i++) {
-  //console.log("i countries", i)
   countires_list_html.push(
     study_list_countries[i]
   );
 }
 
 for (let i = 0; i < 32; i++) {
-  //console.log("i countries", i)
   body_list_html.push(
     study_list_body[i]
   );
 }
 
 
+// create a fixation cross
 var fixation = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: '<div style="font-size:60px;">+</div>',
   choices: "NO_KEYS",
-  trial_duration: 1500,
+  trial_duration: 1000,
 };
 
+// a function that randomaly smaples from the list. It takes an array of objects and the length of the sample as arguments. 
 function sampleRandomly20(arr, count) {
     const shuffled = arr.slice().sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
 }
 
-
+// sample N from each list 
 cities_20array = sampleRandomly20(study_list_cities, 8)  
 countries_20array = sampleRandomly20(study_list_countries, 8)  
 body_20array = sampleRandomly20(study_list_body, 8)  
@@ -165,29 +168,36 @@ let array_countries = Object.values(countries_20array);
 let array_body = Object.values(body_20array);
 let array_unrelated = Object.values(random_20array);
 
+// add unrelated words to each of the test lists. For example, for the list of body parts of the length X,
+// a list of unrelated words of the same length will be added.
 var cities_list = array_cities.concat(array_unrelated);
 var countries_list = array_countries.concat(array_unrelated);
 var body_list = array_body.concat(array_unrelated);
 
+
+// create part of a trial, on which the stimulus is presented for the time duration of 2ms. 
 var test = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: jsPsych.timelineVariable('stimulus'),
-  trial_duration: 1200,
+  trial_duration: 2500,
   choices: "NO_KEYS"
 }
 
+// create complete trials, on which the stimulus (CITIES) is presented followed by a fixation cross
 var test_procedure_cities = {
   timeline: [fixation, test],
   timeline_variables: cities_list,
   randomize_order: true
 }
 
+// create complete trials, on which the stimulus (COUNTRIES) is presented followed by a fixation cross
 var test_procedure_coutries = {
   timeline: [fixation, test],
   timeline_variables: countries_list,
   randomize_order: true
 }
 
+// create complete trials, on which the stimulus (BODY PARTS) is presented followed by a fixation cross
 var test_procedure_body = {
   timeline: [fixation, test],
   timeline_variables: body_list,
@@ -196,10 +206,12 @@ var test_procedure_body = {
 
 
 
-/////////////////////
-// N-Back Task /////
-////////////////////
+//////////////////////////////////////////
+//// A Distraction Task: N-Back Task /////
+/////////////////////////////////////////
 
+
+// create an array of numbers 
 var n = [
   {n: "<p style=\"font-size:30px;\">3</p>"},
   {n: "<p style=\"font-size:30px;\">1</p>"},
@@ -211,35 +223,33 @@ var n = [
   {n: "<p style=\"font-size:30px;\">1</p>"},
 ]
 
+// create the stimilus representation N-Back task, on which the participants has to 
+//press a key if the Nth number ago was identical to the currently presented one. Each number is presented for 1000ms. 
 var n_back = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: jsPsych.timelineVariable('n'),
-  trial_duration: 100,
+  trial_duration: 1000,
   choices: ["k", "d"]
 }
 
+// Create a trial, on which numbers are presented sequentially separated by a fixation corss. 
 var n_back_procedure = {
   timeline: [fixation, n_back],
   timeline_variables: n,
   randomize_order: false
 }
 
-
+// an introduction page for the N-back task 
 var n_back_intro = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: "Press the space key to begin the next (n-back) task",
     choices: ["Enter"]
-  };
+};
 
-  var new_list = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: "press the space key to begin the next memory task",
-    choices: ["Enter"]
-  };
 
 
 ////////////////////////////////
-/// Memory Task - Test List ///
+/// Memory Task - Test Phase ///
 ////////////////////////////////
 
 // full list of new words
@@ -276,6 +286,10 @@ function shuffleWords(word1, word2) {
         }
 
 
+var countries_first = []; 
+var countries_second= []; 
+var countries_pairs = [];
+
 var cities_first = []; 
 var cities_second= []; 
 var cities_pairs = [];
@@ -284,8 +298,11 @@ var body_first = [];
 var body_second= []; 
 var body_pairs = [];
 
+
+
 for (let g = 0; g < 8; g++) {
   console.log("g", g)
+  ////////////////////////////////////////////////////////////////////////////////////////////
   //// Cities VS. Unrelated
   // R1 vs. R0
     var cities_matched_old = cities_randomSample_old[g].stimulus.match(/>([^<]+)</);
@@ -312,8 +329,40 @@ for (let g = 0; g < 8; g++) {
     cities_first.push(cities_old, cities_new, cities_old, random_old)
     cities_second.push(cities_new, random_old, random_new, random_new)
 
+////////////////////////////////////////////////////////////////////////////////////////////
 
-  //// Body VS. Unrelated
+//// Countries VS. Unrelated
+
+// R1 vs. R0
+    var countries_matched_old = countries_randomSample_old[g].stimulus.match(/>([^<]+)</);
+    var countries_old = countries_matched_old ? countries_matched_old[1] : '';
+    var countries_matched_new = Countries_random_new[g].stimulus.match(/>([^<]+)</);
+    var countries_new = countries_matched_new ? countries_matched_new[1] : '';
+// R0 vs. U1
+    var countries_matched_new = Countries_random_new[g].stimulus.match(/>([^<]+)</);
+    var countries_new = countries_matched_new ? countries_matched_new[1] : '';
+    var random_matched_old = random_randomSample_old[g].stimulus.match(/>([^<]+)</);
+    var random_old = random_matched_old ? random_matched_old[1] : ''; 
+// R1 vs. U0
+    var countries_matched_old = countries_randomSample_old[g].stimulus.match(/>([^<]+)</);
+    var countries_old = countries_matched_old ? countries_matched_old[1] : '';
+    var random_matched_new = Sample_random_new[g].stimulus.match(/>([^<]+)</);
+    var random_new = random_matched_new ? random_matched_new[1] : ''; 
+// U1 vs. U0
+    var random_matched_old = random_randomSample_old[g].stimulus.match(/>([^<]+)</);
+    var random_old = random_matched_old ? random_matched_old[1] : '';
+    var random_matched_new = Sample_random_new[g].stimulus.match(/>([^<]+)</);
+    var random_new = random_matched_new ? random_matched_new[1] : ''; 
+
+
+countries_first.push(countries_old, countries_new, countries_old, random_old)
+countries_second.push(countries_new, random_old, random_new, random_new)
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+//// Body VS. Unrelated
+
   // R1 vs. R0
     var body_matched_old = body_randomSample_old[g].stimulus.match(/>([^<]+)</);
     var body_old = body_matched_old ? body_matched_old[1] : '';
@@ -335,10 +384,8 @@ for (let g = 0; g < 8; g++) {
     var random_matched_new = Sample_random_new[g].stimulus.match(/>([^<]+)</);
     var random_new = random_matched_new ? random_matched_new[1] : ''; 
 
-
-    body_first.push(body_old, body_new, body_old, random_old)
-    body_second.push(body_new, random_old, random_new, random_new)
-
+  body_first.push(body_old, body_new, body_old, random_old)
+  body_second.push(body_new, random_old, random_new, random_new)
 
 }
 
@@ -375,6 +422,25 @@ console.log("k", k)
             </div>`;
 
     body_pairs.push({
+        slider: htmlString
+    });
+}
+
+
+for (let j = 0; j <32; j ++) {
+console.log("j", j)
+ var [displayedFirstWord, displayedSecondWord] = shuffleWords(countries_first[j], countries_second[j]);
+  var htmlString = `<div style="width:500px;">
+                <p>Which one of the words presented is 'old'?</p>
+                <div style="width:240px; float: left;">
+                    <p>${displayedFirstWord}</p>
+                </div>
+                <div style="width:240px; float: right;">
+                    <p>${displayedSecondWord}</p>
+                </div>
+            </div>`;
+
+    countries_pairs.push({
         slider: htmlString
     });
 }
@@ -429,10 +495,24 @@ var trial_slider = {
     labels: ['100% sure old', 'completely unsure', '100% sure old'],
 };
 
+// create an in-between phase between the test lists
+var new_list = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: "press the space key to begin the next memory task",
+    choices: ["Enter"]
+  };
+
 
 var cities_testPhase = {
   timeline: [fixation, trial_slider],
   timeline_variables: cities_pairs,
+  randomize_order: true
+}
+
+
+var countries_testPhase = {
+  timeline: [fixation, trial_slider],
+  timeline_variables: countries_pairs,
   randomize_order: true
 }
 
@@ -459,20 +539,24 @@ var slide_procedure_R0R0 = {
 
 
 // or via description of the difficulty 
-timeline = [ 
-  {
+timeline = [
+{
     type: jsPsychSpeechRecording,
     start: true
-  },
-  welcome, test_procedure_body, n_back_intro, n_back_procedure, body_testPhase,
-                     test_procedure_cities, n_back_intro, n_back_procedure, cities_testPhase,
-  {
+  },  
+welcome, 
+            test_procedure_cities, n_back_intro, n_back_procedure, cities_testPhase,
+            test_procedure_body, n_back_intro, n_back_procedure, body_testPhase,
+            test_procedure_coutries, n_back_intro, n_back_procedure, countries_testPhase,
+            {
     type: jsPsychSpeechRecording,
     start: false
-  }]
+  }
+                     ]
 
 
 jsPsych.run(timeline);
+
 
 
 </script>
