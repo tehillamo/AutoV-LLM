@@ -1,4 +1,4 @@
-class Summarizer:
+def summarize():
     pass
 
     

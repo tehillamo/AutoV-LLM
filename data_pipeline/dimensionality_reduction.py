@@ -1,0 +1,47 @@
+import pandas as pd 
+from sklearn.decomposition import PCA
+import numpy as np
+from sklearn.manifold import TSNE
+
+
+def reduce(df, column, reduction_algorithm = "PCA", dimension = 3, new_column_name = None):
+    if new_column_name == None:
+        new_column_name = f"{column}_reduced_{reduction_algorithm}"
+    if reduction_algorithm == "PCA":
+        return pca(df, column, dimension, new_column_name)
+    if reduction_algorithm == "TSNE":
+        return tsne(df, column, dimension, new_column_name)
+    if reduction_algorithm == "both":
+        return both(df, column, dimension, new_column_name)
+
+def pca(df, column, dimension, new_column_name):
+    pca = PCA(n_components=dimension)
+    vals = np.asarray([np.array(x) for x in df[column].values])
+    pca.fit(vals)
+    df[new_column_name] = df.apply(lambda row: pca.transform(np.asarray(row[column].reshape(1, -1)))[0], axis=1)
+    return df
+
+
+def tsne(df, column, dimension, new_column_name):
+    vals = np.asarray([np.array(x) for x in df[column].values])
+    tsne = TSNE(n_components=dimension, learning_rate='auto', init='random', perplexity=5)
+    transformed = tsne.fit_transform(vals)
+    transformed = [np.asarray(x) for x in transformed]
+    df[new_column_name] = transformed
+    return df
+
+def both(df ,column, dimension, new_column_name):
+    n_comp = min(dimension, df.shape[0], df.shape[1])
+    pca = PCA(n_components=n_comp)
+    vals = np.asarray([np.array(x) for x in df[column].values])
+    transformed_pca = pca.fit_transform(vals)
+    tsne = TSNE(n_components=dimension, learning_rate='auto', init='random', perplexity=5)
+    transformed_tsne = tsne.fit_transform(transformed_pca)
+    transformed_tsne = [np.asarray(x) for x in transformed_tsne]
+    df[new_column_name] = transformed_tsne
+    return df
+    
+
+
+
+    
