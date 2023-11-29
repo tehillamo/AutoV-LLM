@@ -18,7 +18,10 @@ def pca(df, column, dimension, new_column_name):
     pca = PCA(n_components=dimension)
     vals = np.asarray([np.array(x) for x in df[column].values])
     pca.fit(vals)
-    df[new_column_name] = df.apply(lambda row: pca.transform(np.asarray(row[column].reshape(1, -1)))[0], axis=1)
+    print(f"Explained variance from PCA: {pca.explained_variance_ratio_}")
+    for i in range(dimension):
+        df[f"{new_column_name}_{i+1}"] = df.apply(lambda row: pca.transform(np.asarray(row[column].reshape(1, -1)))[0][i], axis=1)
+    # df[new_column_name] = df.apply(lambda row: pca.transform(np.asarray(row[column].reshape(1, -1)))[0], axis=1)
     return df
 
 
@@ -27,8 +30,10 @@ def tsne(df, column, dimension, new_column_name):
     tsne = TSNE(n_components=dimension, learning_rate='auto', init='random', perplexity=5)
     transformed = tsne.fit_transform(vals)
     transformed = [np.asarray(x) for x in transformed]
-    df[new_column_name] = transformed
-    return df
+    df[f'{new_column_name}_tmp'] = transformed
+    for i in range(dimension):
+        df[f"{new_column_name}_{i+1}"] = df.apply(lambda row: row[f'{new_column_name}_tmp'][i], axis=1)
+    return df.drop(f'{new_column_name}_tmp', axis=1)
 
 def both(df ,column, dimension, new_column_name):
     n_comp = min(dimension, df.shape[0], df.shape[1])
@@ -38,8 +43,10 @@ def both(df ,column, dimension, new_column_name):
     tsne = TSNE(n_components=dimension, learning_rate='auto', init='random', perplexity=5)
     transformed_tsne = tsne.fit_transform(transformed_pca)
     transformed_tsne = [np.asarray(x) for x in transformed_tsne]
-    df[new_column_name] = transformed_tsne
-    return df
+    df[f'{new_column_name}_tmp'] = transformed_tsne
+    for i in range(dimension):
+        df[f"{new_column_name}_{i+1}"] = df.apply(lambda row: row[f'{new_column_name}_tmp'][i], axis=1)
+    return df.drop(f'{new_column_name}_tmp', axis=1)
     
 
 
