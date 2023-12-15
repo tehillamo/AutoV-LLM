@@ -26,8 +26,8 @@
       },
       on_trial_start: function(trial) {
         onTrialStartRecording(trial);
-        /* console.log(jsPsych.data)
-        console.log(trial) */
+        console.log(jsPsych.data)
+        console.log(trial)
       },
       on_trial_finish: function(trial) {
         onTrialFinishRecording(trial);
@@ -41,20 +41,27 @@
 var instruction_1 = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: "<div style = 'font-size: 30px;font-family: Monospace'> Welcome to our memory recall experiment.</div>"+
-      "<div style = 'font-size: 20px;font-family: Monospace'><br><br>In this study, you will be tested on your ability to remember information."+
-      "<br>In the <span style='color: red;'>first part </span>You will see a list of words displayed one by one <br> in the center of your screen."+
+      "<div style = 'font-size: 28px;font-family: Monospace'><br><br>In this study, you will be tested on your ability to remember information."+
+      "<br><br>In the <span style='color: red;'>first part </span>You will see a list of words displayed one by one <br> in the center of your screen."+
       "<br>Your task is to try to memorize these words.<br> " +
-      "Later, in the <span style='color: red;'> second part</span> of the experiment, <br> you will be asked to recall the words you have seen."+
-      "<br><br><br> Please be aware that we will be <span style='color: red;'> recording your voice during this task</span>."+
-      "<br>Your task is to think aloud as you engage with the task, <br>sharing your thoughts on <span style='color: red;'> how you're learning the words</span> and <span style='color: red;'> how you try recall them.</span>"+
-      "<br>Speak <b>freely and naturally</b> about your thought process, without worrying about the style or structure of your sentences.<br>"+
+      "<br><br> Later, in the <span style='color: red;'> second part</span> of the experiment, you will be asked to <br>  recall the words you have seen."+
       "<br><br><br>Press the space key to continue</div>",
     choices: [" "],
   };
 
+var instructions_recording = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: "<div style = 'font-size:28px;font-family: Monospace'><br><br><br> Please be aware that we will be <br> <span style='color: red; font-size: 30px'> recording your voice during this task.<br><br></span>"+
+      "<br>Your task is to think aloud as you engage with the task, <br>sharing your thoughts on <span style='color: red;'> how you're learning the words</span> and <span style='color: red;'> <br>how you try recall them.</span>"+
+      "<br><br> Speak <b>freely and naturally</b> about your thought process, <br>without worrying about the style or structure of your sentences.<br>"+
+      "<br><br><br><br>Press the space key to continue</div>",
+      choices: [" "],
+  };
+
+
   var instruction_1_2 = {
     type: jsPsychHtmlKeyboardResponse,
-    stimulus: "<div style = 'font-size: 25px;font-family: Monospace'>"+
+    stimulus: "<div style = 'font-size: 28px;font-family: Monospace'>"+
     "<br><br><br>You will complete 3 blocks of trials. <br><br>As mentioned earlier, each block contains two phases:<br><br>A <span style='color: red;'>study phase </span> and a <span style='color: red;'>test phase</span>"+
     "<br><br><br>Press the space key to continue</div>",
     choices: [" "],
@@ -65,7 +72,7 @@ var instruction_1 = {
   
 var instruction_2 = {
   type: jsPsychHtmlKeyboardResponse,
-  stimulus: "<div style = 'font-size: 25px;font-family: Monospace'> In the <span style='color: red;'> study phase </span>, you will be shown a list of words.<br><br><br>The words will appear one at a time at the centre of the screen.</br><br>Please remember them for the test phase."+
+  stimulus: "<div style = 'font-size: 28px;font-family: Monospace'> In the <span style='color: red;'> study phase, </span> you will be shown a list of words.<br><br><br>The words will appear one at a time at the centre of the screen.</br><br>Please remember them for the test phase."+
   "<br><br><br><br>Press the SPACE key when you are ready to start the first block",
   choices: [" "],
 }
@@ -73,7 +80,7 @@ var instruction_2 = {
 
 var instruction_btw_lists_1_2 = {
   type: jsPsychHtmlKeyboardResponse,
-  stimulus: "<div style = 'font-size: 25px;font-family: Monospace'>End of Block 1." +
+  stimulus: "<div style = 'font-size: 28px;font-family: Monospace'>End of Block 1." +
   "<br><br>A quick reminder: You will be shown a list of words.<br><br><br>The words will appear one at a time at the centre of the screen.</br><br>Please remember them for the test phase."+
   "<br><br><br><br>Press the SPACE key to continue.  </div>",
   choices: [" "],
@@ -82,7 +89,7 @@ var instruction_btw_lists_1_2 = {
 
 var instruction_btw_lists_2_3 = {
   type: jsPsychHtmlKeyboardResponse,
-  stimulus: "<div style = 'font-size: 25px;font-family: Monospace'>End of Block 2." +
+  stimulus: "<div style = 'font-size: 28px;font-family: Monospace'>End of Block 2." +
   "<br><br>A quick reminder: You will be shown a list of words.<br><br><br>The words will appear one at a time at the centre of the screen.</br><br>Please remember them for the test phase."+
   "<br><br><br><br>Press the SPACE key to continue.  </div>",
   choices: [" "],
@@ -91,7 +98,7 @@ var instruction_btw_lists_2_3 = {
 
 var instruction_end = {
   type: jsPsychHtmlKeyboardResponse,
-  stimulus: "<div style = 'font-size: 25px;font-family: Monospace'>End of the Experiment." +
+  stimulus: "<div style = 'font-size: 28px;font-family: Monospace'>End of the Experiment." +
   "<br><br><br><br>Press the SPACE key to end the experiment and click 'ok' to send your data. After that you can close the Website's tab.  </div>",
   choices: [" "],
 }
@@ -119,7 +126,14 @@ var words_unrelated = ["ape", "bard", "bile", "blitz", "brink", "brook", "broth"
                       "meat", "mime", "moat", "moot", "mute", "nark", "neap", "need", "pale", "peal",
                       "peel", "pout", "prize", "prose", "prove", "punt", "roam", "rove", "shout", "shove",
                       "slope", "sloth", "slot", "spat", "spew", "spout", "spume", "streak", "stroke", "swim",
-                      "tilt", "toot", "trope", "veal", "weal", "wilt", "woof", "wool", "yarn", "zoom"];
+                      "tilt", "toot", "trope", "veal", "weal", "wilt", "woof", "wool", "yarn", "zoom",              
+                      "TOWN","CHILD","FEEL","LAND","GIRL","SIX","FRONT","VOICE","AGE",
+                      "WIFE","COST","COURT","FORCE","LOVE","TURN","CLOSE","WEST","JOB","BOARD","CHANGE","SOUTH","BOY",
+                      "STREET","AIR","MISS","KEEP","CAR","FIELD","WORD","HALF","WEEK","DEATH"];
+
+words_unrelated = words_unrelated.map(v => v.toLowerCase());
+
+
 
 // List of cities:
 var words_cities = ["sydney", "los angeles", "bucharest", "chicago", "auckland",
@@ -237,17 +251,17 @@ function sampleWithReplacement(arr, count) {
 
 
 // sample N from each list sampling without replacememnt 
-cities_20array = sampleRandomly20(study_list_cities, 8)  
-countries_20array = sampleRandomly20(study_list_countries, 8)  
-body_20array = sampleRandomly20(study_list_body, 8)  
+cities_20array = sampleRandomly20(study_list_cities, 16)  
+countries_20array = sampleRandomly20(study_list_countries, 16)  
+body_20array = sampleRandomly20(study_list_body, 16)  
 
-random_20array = sampleRandomly20(study_list_unrelated, 8)
+random_20array = sampleRandomly20(study_list_unrelated, 16*3)
 var random_left = [];
 var random_left = unrelated_list_html.filter(item => !random_20array.includes(item));
 
 
 
-random_20array_cities = sampleRandomly20(study_list_unrelated, 12) 
+// random_20array_cities = sampleRandomly20(study_list_unrelated, 12) 
 /* random_20array_cities =  random_20array_cities.filter(item => !cities_20array.includes(item));
 random_20array_cities = random_20array_cities.slice(0, 8);
 var cities_left = [];
@@ -256,40 +270,41 @@ var cities_left  = cities_left.filter(item => item !== undefined); */
 
 
 
-random_20array_ctr = sampleRandomly20(study_list_unrelated, 15)
-random_20array_ctr  = random_20array_ctr.filter(item => !countries_20array.includes(item));
-random_20array_ctr = random_20array_ctr.slice(0, 8);
+//random_20array_ctr = sampleRandomly20(study_list_unrelated, 15)
+//random_20array_ctr  = random_20array_ctr.filter(item => !countries_20array.includes(item));
+//random_20array_ctr = random_20array_ctr.slice(0, 8);
 
-var ctr_left = [];
-var ctr_left = countires_list_html.filter(item => !random_20array_ctr.includes(item));
-var ctr_left  = ctr_left.filter(item => item !== undefined);
+// var ctr_left = [];
+// var ctr_left = countires_list_html.filter(item => !random_20array_ctr.includes(item));
+// var ctr_left  = ctr_left.filter(item => item !== undefined);
 
 
 
-random_20array_body = sampleRandomly20(study_list_unrelated, 15)
-random_20array_body = random_20array_body.filter(item => !body_20array.includes(item));
-random_20array_body = random_20array_body.slice(0, 8);
+//random_20array_body = sampleRandomly20(study_list_unrelated, 15)
+// random_20array_body = random_20array_body.filter(item => !body_20array.includes(item));
+// random_20array_body = random_20array_body.slice(0, 8);
 
-var body_left = [];
-var body_left = body_list_html.filter(item => !body_20array.includes(item));
-var body_left  = body_left.filter(item => item !== undefined);
+// var body_left = [];
+// var body_left = body_list_html.filter(item => !body_20array.includes(item));
+// var body_left  = body_left.filter(item => item !== undefined);
 
 
 
 let array_cities = Object.values(cities_20array);
 let array_countries = Object.values(countries_20array);
 let array_body = Object.values(body_20array);
-let array_unrelated_cities = Object.values(random_20array_cities);
-let array_unrelated_cntr = Object.values(random_20array_ctr);
-let array_unrelated_body = Object.values(random_20array_body);
+// let array_unrelated_cities = Object.values(random_20array_cities);
+// let array_unrelated_cntr = Object.values(random_20array_ctr);
+// let array_unrelated_body = Object.values(random_20array_body);
 
 
 
 // add unrelated words to each of the test lists. For example, for the list of body parts of the length X,
 // a list of unrelated words of the same length will be added.
-var cities_list = array_cities.concat(array_unrelated_cities);
-var countries_list = array_countries.concat(array_unrelated_cntr);
-var body_list = array_body.concat(array_unrelated_body);
+var random_20array_tmp = random_20array.slice()
+var cities_list = array_cities.concat(sampleRandomly20(random_20array_tmp, 16));
+var countries_list = array_countries.concat(sampleRandomly20(random_20array_tmp, 16));
+var body_list = array_body.concat(sampleRandomly20(random_20array_tmp, 16));
 
 
 // create part of a trial, on which the stimulus is presented for the time duration of 2ms. 
@@ -405,39 +420,41 @@ var body_first = [];
 var body_second= []; 
 var body_pairs = [];
 
-var remaining_cities = study_list_cities.slice()
-var taken_cities = cities_20array.slice()
+var remaining_cities = study_list_cities
+var taken_cities = cities_20array
 
-var remaining_countries = study_list_countries.slice()
-var taken_countries = countries_20array.slice()
+var remaining_countries = study_list_countries
+var taken_countries = countries_20array
 
-var remaining_body = study_list_body.slice()
-var taken_body = body_20array.slice()
+var remaining_body = study_list_body
+var taken_body = body_20array
 
-var remaining_unrelated = study_list_unrelated.slice()
-var taken_unrelated = random_20array.slice()
+var remaining_unrelated = study_list_unrelated
+console.log("dj,fghjkdfh")
+console.log(remaining_unrelated)
+var taken_unrelated = random_20array
 
 for (let g = 0; g < 8; g++) {
   console.log(g)
   ////////////////////////////////////////////////////////////////////////////////////////////
   //// Cities VS. Unrelated
   // R1 vs. R0
-  var cities_matched_old_1 = sampleWithReplacement(taken_cities, 1)[0].stimulus.match(/>([^<]+)</);
+  var cities_matched_old_1 = sampleRandomly20(taken_cities, 1)[0].stimulus.match(/>([^<]+)</);
   var cities_old_1 = cities_matched_old_1 ? cities_matched_old_1[1] : '';
   var cities_matched_new = sampleRandomly20(remaining_cities,1)[0].stimulus.match(/>([^<]+)</);
   var cities_new_1 = cities_matched_new ? cities_matched_new[1] : '';
   // R0 vs. U1
   var cities_matched_new_2 = sampleRandomly20(remaining_cities,1)[0].stimulus.match(/>([^<]+)</);
   var cities_new_2 = cities_matched_new_2 ? cities_matched_new_2[1] : '';
-  var random_matched_old = sampleWithReplacement(taken_unrelated, 1)[0].stimulus.match(/>([^<]+)</);
+  var random_matched_old = sampleRandomly20(taken_unrelated, 1)[0].stimulus.match(/>([^<]+)</);
   var random_old_1 = random_matched_old ? random_matched_old[1] : ''; 
   // R1 vs. U0
-  var cities_matched_old_2 = sampleWithReplacement(taken_cities, 1)[0].stimulus.match(/>([^<]+)</);
+  var cities_matched_old_2 = sampleRandomly20(taken_cities, 1)[0].stimulus.match(/>([^<]+)</);
   var cities_old_2 = cities_matched_old_2 ? cities_matched_old_2[1] : '';
   var random_matched_new_1 = sampleRandomly20(remaining_unrelated, 1)[0].stimulus.match(/>([^<]+)</);
   var random_new_1 = random_matched_new_1 ? random_matched_new_1[1] : ''; 
   // U1 vs. U0
-  var random_matched_old_2 = sampleWithReplacement(taken_unrelated,1)[0].stimulus.match(/>([^<]+)</);
+  var random_matched_old_2 = sampleRandomly20(taken_unrelated,1)[0].stimulus.match(/>([^<]+)</);
   var random_old_2 = random_matched_old_2 ? random_matched_old_2[1] : '';
   var random_matched_new_2 = sampleRandomly20(remaining_unrelated,1)[0].stimulus.match(/>([^<]+)</);
   var random_new_2 = random_matched_new_2 ? random_matched_new_2[1] : ''; 
@@ -450,22 +467,22 @@ for (let g = 0; g < 8; g++) {
   //// Countries VS. Unrelated
 
   // R1 vs. R0
-  var countries_matched_old = sampleWithReplacement(taken_countries,1)[0].stimulus.match(/>([^<]+)</);
+  var countries_matched_old = sampleRandomly20(taken_countries,1)[0].stimulus.match(/>([^<]+)</);
   var countries_old = countries_matched_old ? countries_matched_old[1] : '';
   var countries_matched_new_1 = sampleRandomly20(remaining_countries,1)[0].stimulus.match(/>([^<]+)</);
   var countries_new_1 = countries_matched_new_1 ? countries_matched_new_1[1] : '';
   // R0 vs. U1
   var countries_matched_new_2 = sampleRandomly20(remaining_countries,1)[0].stimulus.match(/>([^<]+)</);
   var countries_new_2 = countries_matched_new_2 ? countries_matched_new_2[1] : '';
-  var random_matched_old_1 = sampleWithReplacement(taken_unrelated,1)[0].stimulus.match(/>([^<]+)</);
+  var random_matched_old_1 = sampleRandomly20(taken_unrelated,1)[0].stimulus.match(/>([^<]+)</);
   var random_old_1 = random_matched_old_1 ? random_matched_old_1[1] : ''; 
   // R1 vs. U0
-  var countries_matched_old_2 = sampleWithReplacement(taken_countries,1)[0].stimulus.match(/>([^<]+)</);
+  var countries_matched_old_2 = sampleRandomly20(taken_countries,1)[0].stimulus.match(/>([^<]+)</);
   var countries_old_2 = countries_matched_old_2 ? countries_matched_old_2[1] : '';
   var random_matched_new_1 = sampleRandomly20(remaining_unrelated,1)[0].stimulus.match(/>([^<]+)</);
   var random_new_1 = random_matched_new_1 ? random_matched_new_1[1] : ''; 
   // U1 vs. U0
-  var random_matched_old = sampleWithReplacement(taken_unrelated,1)[0].stimulus.match(/>([^<]+)</);
+  var random_matched_old = sampleRandomly20(taken_unrelated,1)[0].stimulus.match(/>([^<]+)</);
   var random_old_2 = random_matched_old ? random_matched_old[1] : '';
   var random_matched_new_2 = sampleRandomly20(remaining_unrelated, 1)[0].stimulus.match(/>([^<]+)</);
   var random_new_2 = random_matched_new_2 ? random_matched_new_2[1] : ''; 
@@ -480,22 +497,22 @@ for (let g = 0; g < 8; g++) {
   //// Body VS. Unrelated
 
   // R1 vs. R0
-  var body_matched_old = sampleWithReplacement(taken_body,1)[0].stimulus.match(/>([^<]+)</);
+  var body_matched_old = sampleRandomly20(taken_body,1)[0].stimulus.match(/>([^<]+)</);
   var body_old = body_matched_old ? body_matched_old[1] : '';
   var body_matched_new = sampleRandomly20(remaining_body, 1)[0].stimulus.match(/>([^<]+)</);
   var body_new_1 = body_matched_new ? body_matched_new[1] : '';
   // R0 vs. U1
   var body_matched_new_2 = sampleRandomly20(remaining_body, 1)[0].stimulus.match(/>([^<]+)</);
   var body_new_2 = body_matched_new_2 ? body_matched_new_2[1] : '';
-  var random_matched_old = sampleWithReplacement(taken_unrelated,1)[0].stimulus.match(/>([^<]+)</);
+  var random_matched_old = sampleRandomly20(taken_unrelated,1)[0].stimulus.match(/>([^<]+)</);
   var random_old = random_matched_old ? random_matched_old[1] : ''; 
   // R1 vs. U0
-  var body_matched_old_2 = sampleWithReplacement(taken_body,1)[0].stimulus.match(/>([^<]+)</);
+  var body_matched_old_2 = sampleRandomly20(taken_body,1)[0].stimulus.match(/>([^<]+)</);
   var body_old_2 = body_matched_old_2 ? body_matched_old_2[1] : '';
   var random_matched_new_1 = sampleRandomly20(remaining_unrelated,1)[0].stimulus.match(/>([^<]+)</);
   var random_new_1 = random_matched_new_1 ? random_matched_new_1[1] : ''; 
   // U1 vs. U0
-  var random_matched_old_2 = sampleWithReplacement(taken_unrelated,1)[0].stimulus.match(/>([^<]+)</);
+  var random_matched_old_2 = sampleRandomly20(taken_unrelated,1)[0].stimulus.match(/>([^<]+)</);
   var random_old_2 = random_matched_old_2 ? random_matched_old_2[1] : '';
   var random_matched_new_2 = sampleRandomly20(remaining_unrelated,1)[0].stimulus.match(/>([^<]+)</);
   var random_new_2 = random_matched_new_2 ? random_matched_new_2[1] : ''; 
@@ -585,16 +602,10 @@ r0_r0_cities = [];
 r0_r0_countries = [];
 r0_r0_body = [];
 
-
-var remaining_cities = study_list_cities.slice()
-var taken_cities = cities_20array.slice()
-
-var remaining_unrelated = study_list_unrelated.slice()
-var taken_unrelated = random_20array.slice()
-
 // 4 trials U0 U0; R0 R0; U0 R0. - cities
 //outerLoop:
 for (let m = 0; m < 4; m++) {
+  console.log(m)
   // R0 vs. R0 - cities
   var related_new_cities_1 = sampleRandomly20(remaining_cities,1)[0].stimulus.match(/>([^<]+)</);
   var related_new_cities_1 = related_new_cities_1 ? related_new_cities_1[1] : '';
@@ -793,8 +804,8 @@ var trial_slider = {
     save_trial_parameters: {pair: true, stimulus: true},
     require_movement: true,
     slider_start: 0,
-    min:-3, 
-    max:3,
+    min:-100, 
+    max:100,
     labels: ['<span style ="font-family: Monospace; font-size:16px; margin:10px">100% positive</span>', 
              '<span style ="font-family: Monospace; font-size:16px margin:10px">pretty sure</span>', 
              '<span style ="font-family: Monospace; font-size:16px margin:10px">guess</span>', 
@@ -904,6 +915,7 @@ timeline = [
   },  
             
   instruction_1,
+  instructions_recording, 
   instruction_1_2, 
   instruction_2, 
   
