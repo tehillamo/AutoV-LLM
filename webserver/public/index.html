@@ -259,45 +259,9 @@ random_20array = sampleRandomly20(study_list_unrelated, 16*3)
 var random_left = [];
 var random_left = unrelated_list_html.filter(item => !random_20array.includes(item));
 
-
-
-// random_20array_cities = sampleRandomly20(study_list_unrelated, 12) 
-/* random_20array_cities =  random_20array_cities.filter(item => !cities_20array.includes(item));
-random_20array_cities = random_20array_cities.slice(0, 8);
-var cities_left = [];
-var cities_left = cities_list_html.filter(item => !random_20array_cities.includes(item));
-var cities_left  = cities_left.filter(item => item !== undefined); */
-
-
-
-//random_20array_ctr = sampleRandomly20(study_list_unrelated, 15)
-//random_20array_ctr  = random_20array_ctr.filter(item => !countries_20array.includes(item));
-//random_20array_ctr = random_20array_ctr.slice(0, 8);
-
-// var ctr_left = [];
-// var ctr_left = countires_list_html.filter(item => !random_20array_ctr.includes(item));
-// var ctr_left  = ctr_left.filter(item => item !== undefined);
-
-
-
-//random_20array_body = sampleRandomly20(study_list_unrelated, 15)
-// random_20array_body = random_20array_body.filter(item => !body_20array.includes(item));
-// random_20array_body = random_20array_body.slice(0, 8);
-
-// var body_left = [];
-// var body_left = body_list_html.filter(item => !body_20array.includes(item));
-// var body_left  = body_left.filter(item => item !== undefined);
-
-
-
 let array_cities = Object.values(cities_20array);
 let array_countries = Object.values(countries_20array);
 let array_body = Object.values(body_20array);
-// let array_unrelated_cities = Object.values(random_20array_cities);
-// let array_unrelated_cntr = Object.values(random_20array_ctr);
-// let array_unrelated_body = Object.values(random_20array_body);
-
-
 
 // add unrelated words to each of the test lists. For example, for the list of body parts of the length X,
 // a list of unrelated words of the same length will be added.
@@ -376,13 +340,6 @@ var n_back_intro = {
 
 
 // sample of old words 
-/* var cities_randomSample_old = sampleRandomly20(study_list_cities, 16)
-var countries_randomSample_old = sampleRandomly20(study_list_countries, 16)
-var body_randomSample_old = sampleRandomly20(study_list_body, 16)
-console.log(study_list_unrelated)
-var random_randomSample_old = sampleRandomly20(study_list_unrelated, 48)
-console.log(random_randomSample_old) */
-//var cities_pairs = [];
 var cityNew_unrelatedOld_pairs = [];
 var cityOld_unrelatedNew_pairs = [];
 var unrelatedOld_unrelatedNew_pairs = [];
@@ -390,16 +347,6 @@ var relatedNew_relatedNew_pairs = [];
 var unrelatedNew_unrelatedNew_pairs = [];
 var countries_combinedTexts = [];
 var body_combinedTexts = [];
-
-
-// full list of new words
-/* var Sample_random_new = sampleRandomly20(study_list_unrelated, 100) */
-
-/* var Cities_random_new = sampleRandomly20(study_list_cities, 12)
-
-var Countries_random_new = sampleRandomly20(study_list_countries, 12) */
-
-/* var Body_random_new = sampleRandomly20(study_list_body, 100) */
 
 
 // shuffeling function for the location of the stimuli on the scales
@@ -435,7 +382,6 @@ console.log(remaining_unrelated)
 var taken_unrelated = random_20array
 
 for (let g = 0; g < 8; g++) {
-  console.log(g)
   ////////////////////////////////////////////////////////////////////////////////////////////
   //// Cities VS. Unrelated
   // R1 vs. R0
@@ -487,10 +433,8 @@ for (let g = 0; g < 8; g++) {
   var random_matched_new_2 = sampleRandomly20(remaining_unrelated, 1)[0].stimulus.match(/>([^<]+)</);
   var random_new_2 = random_matched_new_2 ? random_matched_new_2[1] : ''; 
 
-
   countries_first.push({R1: countries_old}, {R0: countries_new_2}, {R1: countries_old_2}, {U0: random_old_2})
   countries_second.push({R0: countries_new_1}, {U1: random_old_1}, {U0: random_new_1}, {U0: random_new_2})
-
 
   ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -519,7 +463,6 @@ for (let g = 0; g < 8; g++) {
 
   body_first.push({R1: body_old}, {R0: body_new_2}, {R1: body_old_2}, {U1: random_old_2})
   body_second.push({R0: body_new_1}, {U1: random_old}, {U0: random_new_1}, {U0: random_new_2})
-
 }
 
 
@@ -570,7 +513,6 @@ for (let k = 0; k <32; k ++) {
 
 
 var pairs_countries_raw = [];
-
 for (let j = 0; j <32; j ++) {
   var [displayedFirstWord, displayedSecondWord] = shuffleWords(Object.values(countries_first[j])[0], Object.values(countries_second[j])[0]);
   var htmlString = `<div style="width:500px;font-family: Monospace; font-size:20px">
@@ -605,7 +547,6 @@ r0_r0_body = [];
 // 4 trials U0 U0; R0 R0; U0 R0. - cities
 //outerLoop:
 for (let m = 0; m < 4; m++) {
-  console.log(m)
   // R0 vs. R0 - cities
   var related_new_cities_1 = sampleRandomly20(remaining_cities,1)[0].stimulus.match(/>([^<]+)</);
   var related_new_cities_1 = related_new_cities_1 ? related_new_cities_1[1] : '';
@@ -630,7 +571,6 @@ for (let m = 0; m < 4; m++) {
 
   u0_u0_cities_1.push({R0: related_new_cities_1}, {U0: unrelated_new_1}, {U0: unrelated_new_3})
   u0_u0_cities_2.push({R0: related_new_cities_2}, {U0: unrelated_new_2}, {R0: related_new_cities_3})
-
 }
 
 u0_u0_cities_1 = u0_u0_cities_1.filter(item => item !== undefined);
@@ -769,7 +709,6 @@ u0_u0_cntr_2 = u0_u0_cntr_2.filter(item => item !== undefined);
 u0_u0_cntr_2 = u0_u0_cntr_2.slice(0,12)
 
 // 4 trials U0 U0; R0 R0; U0 R0. - body 
-
 matched_pairs_cntr = [];
 matched_pairs_cntr_raw = [];
 for (let r = 0; r < 12; r++) {
@@ -940,12 +879,9 @@ timeline = [
     type: jsPsychSpeechRecording,
     start: false
   }
-]
-                     
-
+]                 
 
 jsPsych.run(timeline);
-
 
 
 </script>
