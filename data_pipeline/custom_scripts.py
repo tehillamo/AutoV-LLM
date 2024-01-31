@@ -25,6 +25,8 @@ def get_trial_type(df):
 
 def trial_type(x):
     if "Use the response scale to indicate which word you remember, and how confident you are in your response." in x:
+        if "You have reached the  <span style='color: red;'> TEST phase." in x:
+            return "else"
         return "slider"
     if ">+<" in x:
         return "cross"

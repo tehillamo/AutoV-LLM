@@ -14,18 +14,18 @@ def main():
     parser.add_argument("--output", help="Path to the output file.", type=str, required=True)
     parser.add_argument("--reduction_algorithm", help="Reduction algorithm to use.",choices=["PCA", "TSNE", "both"], type=str, default = "PCA")
     parser.add_argument("--dimension", type=int, help="Dimension to reduce to.", default = 2)
-    args = parser.parse_args()
+    parser.add_argument('--behavioral_columns', nargs='+', help="Behavioral columns to merge.")
+    args = parser.parse_args() 
 
-    
-
-    df = transcribe(args.path, "large-v3")
-    #df = transcribe(args.path, "tiny")
+    df = transcribe(args.path, "tiny.en")
     df = create_embeddings(df, "transcribed_text", new_column_name = "embedding")
     df = reduce(df, "embedding", new_column_name = "embedding_reduced_pca", reduction_algorithm = "PCA", dimension = args.dimension)
     df = reduce(df, "embedding", new_column_name = "embedding_reduced_tsne", reduction_algorithm = 'TSNE', dimension = args.dimension)
     df = reduce(df, "embedding", new_column_name = "embedding_reduced_both", reduction_algorithm = 'both', dimension = args.dimension)
 
-    behavioral_columns = ['stimulus', 'response', 'rt', 'pair']
+    # specify behavioral data columns which should be merged
+    behavioral_columns = args.behavioral_columns
+    print(behavioral_columns)
     df = merge_behavioral_data(df, args.path, behavioral_columns)
 
     # custom scripts to create needed features
