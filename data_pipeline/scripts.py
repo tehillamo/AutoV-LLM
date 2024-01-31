@@ -17,7 +17,7 @@ def main():
     parser.add_argument('--behavioral_columns', nargs='+', help="Behavioral columns to merge.")
     args = parser.parse_args() 
 
-    df = transcribe(args.path, "medium.en")
+    df = transcribe(args.path, "large-v3")
     df = create_embeddings(df, "transcribed_text", new_column_name = "embedding")
     df = reduce(df, "embedding", new_column_name = "embedding_reduced_pca", reduction_algorithm = "PCA", dimension = args.dimension)
     df = reduce(df, "embedding", new_column_name = "embedding_reduced_tsne", reduction_algorithm = 'TSNE', dimension = args.dimension)
