@@ -14,3 +14,4 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-r
 COPY . .
 
 CMD [ "python", "scripts.py", "--path", "./ressources", "--output", "./output", "--behavioral_columns", "stimulus", "response", "rt", "pair"]
+#python3 scripts.py --path ../ressources --output ../output --behavioral_columns stimulus response rt pair
