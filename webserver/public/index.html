@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Memory Experiment</title>
+    <title>Memory Experiment -2</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" rel="stylesheet" type="text/css" /> 
@@ -26,8 +26,9 @@
       },
       on_trial_start: function(trial) {
         onTrialStartRecording(trial);
-        console.log(jsPsych.data)
-        console.log(trial)
+        /* console.log(jsPsych.data)
+        console.log(trial) */
+        
       },
       on_trial_finish: function(trial) {
         onTrialFinishRecording(trial);
@@ -40,49 +41,68 @@
 
 var instruction_1 = {
     type: jsPsychHtmlKeyboardResponse,
-    stimulus: "<div style = 'font-size: 30px;font-family: Monospace'> Welcome to our memory recall experiment.</div>"+
-      "<div style = 'font-size: 28px;font-family: Monospace'><br><br>In this study, you will be tested on your ability to remember information."+
-      "<br><br>In the <span style='color: red;'>first part </span>You will see a list of words displayed one by one <br> in the center of your screen."+
-      "<br>Your task is to try to memorize these words.<br> " +
-      "<br><br> Later, in the <span style='color: red;'> second part</span> of the experiment, you will be asked to <br>  recall the words you have seen."+
-      "<br><br><br>Press the space key to continue</div>",
+    stimulus: "<div style = 'font-size: 30px;font-family: Monospace'> Welcome!</div>"+
+      "<div style = 'font-size: 28px;font-family: Monospace'><br><br>This experiment will test your memory."+
+      "<br><br>You will complete 3 blocks of trials."+
+      "<br><br> Each block contains two phases: A <span style='color: red;'> STUDY phase </span> and a <span style='color: red;'> TEST phase </span>."+
+      "<br><br><br><br>Press the SPACE key to continue</div>",
     choices: [" "],
   };
 
-var instructions_recording = {
+var instructions_1_2 = {
     type: jsPsychHtmlKeyboardResponse,
-    stimulus: "<div style = 'font-size:28px;font-family: Monospace'><br><br><br> Please be aware that we will be <br> <span style='color: red; font-size: 30px'> recording your voice during this task.<br><br></span>"+
-      "<br>Your task is to think aloud as you engage with the task, <br>sharing your thoughts on <span style='color: red;'> how you're learning the words</span> and <span style='color: red;'> <br>how you try recall them.</span>"+
-      "<br><br> Speak <b>freely and naturally</b> about your thought process, <br>without worrying about the style or structure of your sentences.<br>"+
-      "<br><br><br><br>Press the space key to continue</div>",
+    stimulus: "<div style = 'font-size:28px;font-family: Monospace'> In the STUDY phase, you will be shown a list of words."+
+      "<br><br><br> The words will appear one at a time at the centre of the screen." + 
+      "<br><br><br> Please remember them for the TEST phase.</span>"+
+      "<br><br><br><br> Press the SPACE key to continue</div>",
       choices: [" "],
   };
 
 
-  var instruction_1_2 = {
+  var instruction_1_3 = {
     type: jsPsychHtmlKeyboardResponse,
-    stimulus: "<div style = 'font-size: 28px;font-family: Monospace'>"+
-    "<br><br><br>You will complete 3 blocks of trials. <br><br>As mentioned earlier, each block contains two phases:<br><br>A <span style='color: red;'>study phase </span> and a <span style='color: red;'>test phase</span>"+
-    "<br><br><br>Press the space key to continue</div>",
+    stimulus: "<div style = 'font-size: 28px;font-family: Monospace; color:red'>" +
+    "<br><br> Throughout this experiment," + 
+    "<br><br> we will be recording your audio because we want " + 
+    "<br><br> to know how and why you are doing things.</div>" +
+    "<br><br><br><br><span style = 'font-size: 28px;font-family: Monospace; color:black'>Press the SPACE key continue</span></div>",
     choices: [" "],
   }
-    
 
 
+var instruction_1_4 = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: "<div style = 'font-size: 24px;font-family: Monospace; color:red'>" +
+    "<br> Could you please talk us through how you are making your decisions." +
+    "<br><br><br> Simply speak out loud about your thought process during the experiment."+
+    "<br><br><br> Don't hesitate to share every detail - we are keen to understand all aspects" + 
+    "<br><br> of how you reach your decision."+
+    "<br><br><br> Don't worry about how you phrase your sentences or your speaking style."+
+    "<br><br><br> <strong>Just speak clearly and naturally.</strong></div>"+
+    "<br><br><br><br><span style = 'font-size: 28px;font-family: Monospace; color:black'>Press the SPACE key when you are ready to start the 1st block</span>",
+    choices: [" "],
+}
   
-var instruction_2 = {
+var instruction_BeforeTestPhase = {
   type: jsPsychHtmlKeyboardResponse,
-  stimulus: "<div style = 'font-size: 28px;font-family: Monospace'> In the <span style='color: red;'> study phase, </span> you will be shown a list of words.<br><br><br>The words will appear one at a time at the centre of the screen.</br><br>Please remember them for the test phase."+
-  "<br><br><br><br>Press the SPACE key when you are ready to start the first block",
+  stimulus: "<div style = 'font-size: 28px;font-family: Monospace'>  You have reached the  <span style='color: red;'> TEST phase. </span>"+
+            "<br><br><br> You will see two words and a response scale." +
+            "<br><br><br> Your task is to indicate which of the two words you remember" +
+            "<br><br><br> Use the response scale to indicate which word you remember, and how confident you are in your response."+
+            "<br><br><br> The slider will appear when you place your cursor over the scale."+
+            '<br><br><img src = "img/scale_img.png" style ="height:170px; width:800px;border: 1px solid;padding: 10px;box-shadow: 5px 10px #888888">'+
+            "<br><br><br>Press the SPACE key when you are ready to start the TEST phase",
   choices: [" "],
 }
 
 
 var instruction_btw_lists_1_2 = {
   type: jsPsychHtmlKeyboardResponse,
-  stimulus: "<div style = 'font-size: 28px;font-family: Monospace'>End of Block 1." +
-  "<br><br>A quick reminder: You will be shown a list of words.<br><br><br>The words will appear one at a time at the centre of the screen.</br><br>Please remember them for the test phase."+
-  "<br><br><br><br>Press the SPACE key to continue.  </div>",
+  stimulus: "<div style = 'font-size: 28px;font-family: Monospace'>End of Block 1.<br>" +
+  "<br><br>A quick reminder: You will be shown a list of words."+
+  "<br><br>The words will appear one at a time at the centre of the screen.</br><br>Please remember them for the TEST phase."+
+  "<br><br><br><span style='color: red;'>Remember that we are interested in your thought process during this experiment, <br><br>so please speak your thoughts out loud during this next phase of the experiment. <br><br>Don't worry about how you phrase things, just speak clearly and naturally.</span>"+
+  "<br><br><br><br>Press the SPACE key to continue with the 2nd block. </div>",
   choices: [" "],
 }
 
@@ -90,8 +110,9 @@ var instruction_btw_lists_1_2 = {
 var instruction_btw_lists_2_3 = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: "<div style = 'font-size: 28px;font-family: Monospace'>End of Block 2." +
-  "<br><br>A quick reminder: You will be shown a list of words.<br><br><br>The words will appear one at a time at the centre of the screen.</br><br>Please remember them for the test phase."+
-  "<br><br><br><br>Press the SPACE key to continue.  </div>",
+  "<br><br>A quick reminder: You will be shown a list of words.<br><br><br>The words will appear one at a time at the centre of the screen.</br><br>Please remember them for the TEST phase."+
+  "<br><br><br><span style='color: red;'>Remember that we are interested in your thought process during this experiment, <br><br>so please speak your thoughts out loud during this next phase of the experiment. <br><br>Don't worry about how you phrase things, just speak clearly and naturally.</span>"+
+  "<br><br><br><br>Press the SPACE key to continue with the 3rd block. </div>",
   choices: [" "],
 }
 
@@ -99,13 +120,13 @@ var instruction_btw_lists_2_3 = {
 var instruction_end = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: "<div style = 'font-size: 28px;font-family: Monospace'>End of the Experiment." +
-  "<br><br><br><br>Press the SPACE key to end the experiment and click 'ok' to send your data. After that you can close the Website's tab.  </div>",
+  "<br><br><br><br><span style='color: red;'>Here is your completion code: C178W5AP</span><br><br>Press the SPACE key to end the experiment and click 'ok' to send your data. <br><br>After copying this code, you can close the Website's tab.  </div>",
   choices: [" "],
 }
 
 var instruction_3 = {
   type: jsPsychHtmlKeyboardResponse,
-  stimulus: "Activity Complete. You have reached the test phase. <br>You will see two words and a response scale. </br>Your task is to indicate which of the two words you remember.<br>"+
+  stimulus: "You have reached the test phase. <br>You will see two words and a response scale. </br>Your task is to indicate which of the two words you remember.<br>"+
   "Use the response scale to indicate which word you remember, and how confident you are in your response.<br>"
 }
 
@@ -146,16 +167,16 @@ var words_cities = ["sydney", "los angeles", "bucharest", "chicago", "auckland",
                       "munich", "kyoto", "seattle", "beijing", "barcelona", "brussels", "dubai"];
 
 // List of countries:
-var words_countries = ["Canada", "France", "Mexico", "England", "Germany", 
-                      "Spain", "Italy", "China", "Japan", "Russia", 
-                      "Brazil", "Ireland", "Australia", "Iraq", "Finland", 
-                      "Argentina", "India", "Switzerland", "Sweden", "Africa", 
-                      "Chile", "Britain", "Iran", "Portugal", "Greece", 
-                      "Scotland", "Egypt", "Israel", "Peru", "Belgium", 
-                      "Korea", "Norway", "Denmark", "Lebanon", "Malaysia", 
-                      "Poland", "Taiwan", "Romania", "Serbia", "Singapore", 
-                      "Indonesia", "Taiwan", "Turkey", "Vietnam", "Thailand", 
-                      "Philippines", "Pakistan", "Netherlands"];
+var words_countries = ["canada", "france", "mexico", "england", "germany", 
+                      "spain", "italy", "china", "japan", "russia", 
+                      "brazil", "ireland", "australia", "iraq", "finland", 
+                      "argentina", "india", "switzerland", "sweden", "africa", 
+                      "chile", "britain", "iran", "portugal", "greece", 
+                      "scotland", "egypt", "israel", "peru", "belgium", 
+                      "korea", "norway", "denmark", "lebanon", "malaysia", 
+                      "poland", "taiwan", "romania", "serbia", "singapore", 
+                      "indonesia", "taiwan", "turkey", "vietnam", "thailand", 
+                      "philippines", "pakistan", "netherlands"];
 
 // List of body parts:
 var words_body = ["leg", "arm", "nail", "muscle", "feet", "finger", "head", 
@@ -173,7 +194,6 @@ var study_list_unrelated = insertWordsToStructure(words_unrelated);
 var study_list_cities = insertWordsToStructure(words_cities);
 var study_list_countries = insertWordsToStructure(words_countries);
 var study_list_body = insertWordsToStructure(words_body);
-console.log(study_list_cities)
 
 
 ////////////////////////////////
@@ -259,9 +279,11 @@ random_20array = sampleRandomly20(study_list_unrelated, 16*3)
 var random_left = [];
 var random_left = unrelated_list_html.filter(item => !random_20array.includes(item));
 
+
 let array_cities = Object.values(cities_20array);
 let array_countries = Object.values(countries_20array);
 let array_body = Object.values(body_20array);
+
 
 // add unrelated words to each of the test lists. For example, for the list of body parts of the length X,
 // a list of unrelated words of the same length will be added.
@@ -287,25 +309,48 @@ var test = {
 var instruction_nBack = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: "<div style = 'font-size: 30px;font-family: Monospace'>"+
-  "You will be shown a sequence of numbers, presented one at a time."+
-  "<br>Your task is to determine whether each current stimulus matches the one presented 2 steps earlier in the sequence."+
-  "<div style = 'text-align: center;'>"+
-  "<br><br>For example, if you see the following numbers: 3, 5, 3, 8, 5."+
-  "<br>You should press the Enter key for the numbers 3, 5, <span style='color: red;'>3</span>, 8, <span style='color: red;'>5</b>."+
-  "<br><br><br> Press the SPACE key to start the task"+
+  "<br>Before the test phase begins, you will complete a short activity."+
+  "<br><br>You will be shown a sequence of numbers, presented one at a time."+
+  "<br><br><br>Your task is to determine whether each current stimulus matches the one presented 2 steps earlier in the sequence."+
+  "<div style ='display:inline-block;vertical-align:middle;'><br><br>For example, if you see the following numbers &#x2192; <img src = 'img/nBack_black.png'; style='height: 100px ; width: 280px;vertical-align:middle;'></div>"+
+  "<div style ='display:inline-block;vertical-align:middle;'><br><br><br>You should press the Enter key for the numbers 3 and 8 &#x2192; <img src = 'img/nBack_red.png'; style='height: 90px ;width: 280px;vertical-align:middle;padding-bottom:30px'></div>"+
+  "<br><br><br><br> Press the SPACE key to start the task"+
   "</div>"
 }
 
 // create an array of numbers 
+function generateNBackSequence(length, x) {
+
+    let sequence = [];
+    for (let i = 0; i < length; i++) {
+        if ((i + 1) % x === 0 && i > 1) {
+            // Every x-th element should be the same as the second-to-last number
+            sequence.push(sequence[sequence.length - 2]);
+        } else {
+            // Generate a random number (e.g., between 0 and 9)
+            let randomNumber = Math.floor(Math.random() * 10);
+            sequence.push(randomNumber);
+        }
+    }
+    return sequence;
+}
+
+// Example usage
+let sequence = generateNBackSequence(20, 2); // Generate a sequence of 20 numbers where every 4th number is the same as the second-to-last number
+
+
 var n = [
-  {n: "<p style=\"font-size:60px;font-family: Monospace\">3</p>"},
-  {n: "<p style=\"font-size:60px;font-family: Monospace\">1</p>"},
-  {n: "<p style=\"font-size:60px;font-family: Monospace\">2</p>"},
-  {n: "<p style=\"font-size:60px;font-family: Monospace\">1</p>"},
-  {n: "<p style=\"font-size:60px;font-family: Monospace\">3</p>"},
-  {n: "<p style=\"font-size:60px;font-family: Monospace\">1</p>"},
-  {n: "<p style=\"font-size:60px;font-family: Monospace\">2</p>"},
-  {n: "<p style=\"font-size:60px;font-family: Monospace\">1</p>"},
+  {n: "<p style=\"font-size:60px;font-family: Monospace\">" + sequence[0] + "</p>"},
+  {n: "<p style=\"font-size:60px;font-family: Monospace\">" + sequence[1] + "</p>"},
+  {n: "<p style=\"font-size:60px;font-family: Monospace\">" + sequence[2] + "</p>"},
+  {n: "<p style=\"font-size:60px;font-family: Monospace\">" + sequence[3] + "</p>"},
+  {n: "<p style=\"font-size:60px;font-family: Monospace\">" + sequence[4] + "</p>"},
+  {n: "<p style=\"font-size:60px;font-family: Monospace\">" + sequence[5] + "</p>"},
+  {n: "<p style=\"font-size:60px;font-family: Monospace\">" + sequence[6] + "</p>"},
+  {n: "<p style=\"font-size:60px;font-family: Monospace\">" + sequence[7] + "</p>"},
+  {n: "<p style=\"font-size:60px;font-family: Monospace\">" + sequence[8] + "</p>"},
+  {n: "<p style=\"font-size:60px;font-family: Monospace\">" + sequence[9] + "</p>"},
+  {n: "<p style=\"font-size:60px;font-family: Monospace\">" + sequence[10] + "</p>"}
 ]
 
 // create the stimilus representation N-Back task, on which the participants has to 
@@ -336,8 +381,6 @@ var n_back_intro = {
 ////////////////////////////////
 /// Memory Task - Test Phase ///
 ////////////////////////////////
-
-
 
 // sample of old words 
 var cityNew_unrelatedOld_pairs = [];
@@ -377,13 +420,11 @@ var remaining_body = study_list_body
 var taken_body = body_20array
 
 var remaining_unrelated = study_list_unrelated
-console.log("dj,fghjkdfh")
+
 console.log(remaining_unrelated)
 var taken_unrelated = random_20array
 
 for (let g = 0; g < 8; g++) {
-  ////////////////////////////////////////////////////////////////////////////////////////////
-  //// Cities VS. Unrelated
   // R1 vs. R0
   var cities_matched_old_1 = sampleRandomly20(taken_cities, 1)[0].stimulus.match(/>([^<]+)</);
   var cities_old_1 = cities_matched_old_1 ? cities_matched_old_1[1] : '';
@@ -433,8 +474,10 @@ for (let g = 0; g < 8; g++) {
   var random_matched_new_2 = sampleRandomly20(remaining_unrelated, 1)[0].stimulus.match(/>([^<]+)</);
   var random_new_2 = random_matched_new_2 ? random_matched_new_2[1] : ''; 
 
-  countries_first.push({R1: countries_old}, {R0: countries_new_2}, {R1: countries_old_2}, {U0: random_old_2})
+
+  countries_first.push({R1: countries_old}, {R0: countries_new_2}, {R1: countries_old_2}, {U1: random_old_2})
   countries_second.push({R0: countries_new_1}, {U1: random_old_1}, {U0: random_new_1}, {U0: random_new_2})
+
 
   ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -463,6 +506,7 @@ for (let g = 0; g < 8; g++) {
 
   body_first.push({R1: body_old}, {R0: body_new_2}, {R1: body_old_2}, {U1: random_old_2})
   body_second.push({R0: body_new_1}, {U1: random_old}, {U0: random_new_1}, {U0: random_new_2})
+
 }
 
 
@@ -470,12 +514,12 @@ for (let g = 0; g < 8; g++) {
 pairs_cities_raw = []
 for (let h = 0; h <32; h++) {
   var [displayedFirstWord, displayedSecondWord] = shuffleWords(Object.values(cities_first[h])[0], Object.values(cities_second[h])[0]);
-  var htmlString = `<div style="width:500px;font-family: Monospace; font-size:20px">
+  var htmlString = `<div style="width:800px;font-family: Monospace; font-size:28px">
                   <p>Use the response scale to indicate which word you remember, and how confident you are in your response.</p>
-                  <div style="width:240px; float: left;font-family: Monospace; font-size:20px">
+                  <div style="width:240px; float: left;font-family: Monospace; font-size:28px">
                       <p>${displayedFirstWord}</p>
                   </div>
-                  <div style="width:240px; float: right;font-family: Monospace; font-size:20px">
+                  <div style="width:240px; float: right;font-family: Monospace; font-size:28px">
                       <p>${displayedSecondWord}</p>
                   </div>
                   </div>`;
@@ -492,12 +536,12 @@ for (let h = 0; h <32; h++) {
 pairs_body_raw = [];
 for (let k = 0; k <32; k ++) {
   var [displayedFirstWord, displayedSecondWord] = shuffleWords(Object.values(body_first[k])[0], Object.values(body_second[k])[0]);
-  var htmlString = `<div style="width:500px;font-family: Monospace; font-size:20px">
+  var htmlString = `<div style="width:800px;font-family: Monospace; font-size:28px">
                   <p>Use the response scale to indicate which word you remember, and how confident you are in your response.</p>
-                  <div style="width:240px; float: left;font-family: Monospace; font-size:20px">
+                  <div style="width:240px; float: left;font-family: Monospace; font-size:28px">
                       <p>${displayedFirstWord}</p>
                   </div>
-                  <div style="width:240px; float: right;font-family: Monospace; font-size:20px">
+                  <div style="width:240px; float: right;font-family: Monospace; font-size:28px">
                       <p>${displayedSecondWord}</p>
                   </div>
                   </div>`;
@@ -513,14 +557,15 @@ for (let k = 0; k <32; k ++) {
 
 
 var pairs_countries_raw = [];
+
 for (let j = 0; j <32; j ++) {
   var [displayedFirstWord, displayedSecondWord] = shuffleWords(Object.values(countries_first[j])[0], Object.values(countries_second[j])[0]);
-  var htmlString = `<div style="width:500px;font-family: Monospace; font-size:20px">
+  var htmlString = `<div style="width:800px;font-family: Monospace; font-size:28px">
                     <p>Use the response scale to indicate which word you remember, and how confident you are in your response.</p>
-                    <div style="width:240px; float: left;font-family: Monospace; font-size:20px">
+                    <div style="width:240px; float: left;font-family: Monospace; font-size:28px">
                         <p>${displayedFirstWord}</p>
                     </div>
-                    <div style="width:240px; float: right;font-family: Monospace; font-size:20px">
+                    <div style="width:240px; float: right;font-family: Monospace; font-size:28px">
                         <p>${displayedSecondWord}</p>
                     </div>
                     </div>`;
@@ -571,6 +616,7 @@ for (let m = 0; m < 4; m++) {
 
   u0_u0_cities_1.push({R0: related_new_cities_1}, {U0: unrelated_new_1}, {U0: unrelated_new_3})
   u0_u0_cities_2.push({R0: related_new_cities_2}, {U0: unrelated_new_2}, {R0: related_new_cities_3})
+
 }
 
 u0_u0_cities_1 = u0_u0_cities_1.filter(item => item !== undefined);
@@ -583,12 +629,12 @@ var matched_pairs_cities_raw = [];
 var matched_pairs_cities = [];
 for (let f = 0; f <12; f++) {
   var [displayedFirstWord, displayedSecondWord] = shuffleWords(Object.values(u0_u0_cities_1[f])[0], Object.values(u0_u0_cities_2[f])[0]);
-  var htmlString = `<div style="width:500px;font-family: Monospace; font-size:20px">
+  var htmlString = `<div style="width:800px;font-family: Monospace; font-size:28px">
                 <p>Use the response scale to indicate which word you remember, and how confident you are in your response.</p>
-                <div style="width:240px; float: left;font-family: Monospace; font-size:20px">
+                <div style="width:240px; float: left;font-family: Monospace; font-size:28px">
                     <p>${displayedFirstWord}</p>
                 </div>
-                <div style="width:240px; float: right;font-family: Monospace; font-size:20px">
+                <div style="width:240px; float: right;font-family: Monospace; font-size:28px">
                     <p>${displayedSecondWord}</p>
                 </div>
                 </div>`;
@@ -647,13 +693,12 @@ matched_pairs_body_raw = [];
 matched_pairs_body = [];
 for (let r = 0; r <12; r++) {
   var [displayedFirstWord, displayedSecondWord] = shuffleWords(Object.values(u0_u0_bdy_1[r])[0], Object.values(u0_u0_bdy_2[r])[0]);
-  var htmlString = `
-          <div style="width:500px;font-family: Monospace; font-size:20px">
-              <p> Use the response scale to indicate which word you remember, and how confident you are in your response.<br>The slider will appear when you place your cursor over the scale.<br><br></p>
-              <div style="width:240px; float: left;font-family: Monospace; font-size:20px">
+  var htmlString = `<div style="width:800px;font-family: Monospace; font-size:28px"+
+              <p> Use the response scale to indicate which word you remember, and how confident you are in your response.<br><br></p>
+              <div style="width:240px; float: left;font-family: Monospace; font-size:28px">
                   <p>${displayedFirstWord}</p>
               </div>
-              <div style="width:240px; float: right;font-family: Monospace; font-size:20px">
+              <div style="width:240px; float: right;font-family: Monospace; font-size:28px">
                   <p>${displayedSecondWord}</p>
               </div>
           </div>
@@ -709,17 +754,17 @@ u0_u0_cntr_2 = u0_u0_cntr_2.filter(item => item !== undefined);
 u0_u0_cntr_2 = u0_u0_cntr_2.slice(0,12)
 
 // 4 trials U0 U0; R0 R0; U0 R0. - body 
+
 matched_pairs_cntr = [];
 matched_pairs_cntr_raw = [];
 for (let r = 0; r < 12; r++) {
   var [displayedFirstWord, displayedSecondWord] = shuffleWords(Object.values(u0_u0_cntr_1[r])[0], Object.values(u0_u0_cntr_2[r])[0]);
-  var htmlString = `
-          <div style="width:500px;font-family: Monospace; font-size:20px">
-              <p> Use the response scale to indicate which word you remember, and how confident you are in your response.<br>The slider will appear when you place your cursor over the scale.<br><br></p>
-              <div style="width:240px; float: left;font-family: Monospace; font-size:20px">
+  var htmlString = `<div style="width:800px;font-family: Monospace; font-size:28px"+
+              <p> Use the response scale to indicate which word you remember, and how confident you are in your response.<br><br></p>
+              <div style="width:240px; float: left;font-family: Monospace; font-size:28px">
                   <p>${displayedFirstWord}</p>
               </div>
-              <div style="width:240px; float: right;font-family: Monospace; font-size:20px">
+              <div style="width:240px; float: right;font-family: Monospace; font-size:28px">
                   <p>${displayedSecondWord}</p>
               </div>
           </div>
@@ -745,13 +790,13 @@ var trial_slider = {
     slider_start: 0,
     min:-100, 
     max:100,
-    labels: ['<span style ="font-family: Monospace; font-size:16px; margin:10px">100% positive</span>', 
-             '<span style ="font-family: Monospace; font-size:16px margin:10px">pretty sure</span>', 
-             '<span style ="font-family: Monospace; font-size:16px margin:10px">guess</span>', 
+    labels: ['<span style ="font-family: Monospace; font-size:20px; margin:10px">100% positive</span>', 
+             '<span style ="font-family: Monospace; font-size:20px; margin:10px">pretty sure</span>', 
+             '<span style ="font-family: Monospace; font-size:20px; margin:10px">guess</span>', 
              '' , 
-             '<span style ="font-family: Monospace; font-size:16px">guess</span>', 
-             '<span style ="font-family: Monospace; font-size:16px">pretty sure</span>', 
-             '<span style ="font-family: Monospace; font-size:16px">100% positive</span>'],
+             '<span style ="font-family: Monospace; font-size:20px; margin:10px">guess</span>', 
+             '<span style ="font-family: Monospace; font-size:20px; margin:10px">pretty sure</span>', 
+             '<span style ="font-family: Monospace; font-size:20px; margin:10px">100% positive</span>'],
 };
 
 // create an in-between phase between the test lists
@@ -854,13 +899,14 @@ timeline = [
   },  
             
   instruction_1,
-  instructions_recording, 
-  instruction_1_2, 
-  instruction_2, 
+  instructions_1_2, 
+  instruction_1_3, 
+  instruction_1_4,
   
   test_procedure_cities, 
   instruction_nBack, 
   n_back_procedure, 
+  instruction_BeforeTestPhase,
   cities_testPhase, 
   instruction_btw_lists_1_2, 
 
@@ -879,9 +925,12 @@ timeline = [
     type: jsPsychSpeechRecording,
     start: false
   }
-]                 
-
+]
+                     
+console.log(timeline)
 jsPsych.run(timeline);
+
+
 
 
 </script>
