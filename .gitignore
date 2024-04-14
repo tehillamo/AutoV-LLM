@@ -15,3 +15,11 @@ logs/*
 
 test
 
+*.png
+*.wav
+*.csv
+*.zip
+trial_data.txt
+*.log
+saves
+

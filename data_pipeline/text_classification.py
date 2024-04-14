@@ -20,9 +20,8 @@ def keyword_similarity(df):
     df['highest_similarity'] = df['highest_similarity'].apply(lambda x: x.replace('_similarity',''))
     return df, keywords
 
-def keyword_similarity_zero_shot(df):
+def keyword_similarity_zero_shot(df, keywords):
     threshold = 0.14
-    keywords = ["certain", "uncertain", "sure", "unsure", "pretty sure", "maybe", "kind of", "i think so", "it feels like", "assume that", "definitely", "absolutely", "confidence", "suspect that must", "cannot be", "im positive", "i know", "i remember"]
     pipe = pipeline(model="facebook/bart-large-mnli")
     df['transcribed_text'].fillna('', inplace=True)
     df['highest_similarity'] = df['transcribed_text'].apply(lambda x: zero_shot(x, pipe, keywords, threshold))
@@ -30,12 +29,12 @@ def keyword_similarity_zero_shot(df):
 
 def zero_shot(x, pipe, keywords, threshold = 0.14):
     if len(x) == 0:
-        return 'unknown'
+        return ('unknown', 0)
     result = pipe(x, candidate_labels=keywords)
     if result['scores'][0] > threshold:
-        return result['labels'][0]
+        return (result['labels'][0], result['scores'][0])
     else:
-        return 'unknown'
+        return ('unknown', result['scores'][0])
 
 def toTensor(string):
     string = string.replace("\n", "")
@@ -44,14 +43,7 @@ def toTensor(string):
     splitted = list(map(lambda x: float(x), string_filtered))
     return torch.tensor(splitted, dtype=torch.float)
 
-
-df = pd.read_csv('../../output/output_medium_en.csv', delimiter=';')
-print('Start preprocessing')
-df = preprocessing(df)
-print('length df ', len(df))
-print('Finished preprocessing')
-print('Start keyword similarity')
-df = keyword_similarity_zero_shot(df)
-
-cols =  ['transcribed_text', 'highest_similarity'] 
-df.to_csv("./output_zero_shot.csv", sep=';', index=False, columns=cols)
+def text_classification(df, text_classes):
+    df = preprocessing(df)
+    df = keyword_similarity_zero_shot(df, text_classes)
+    return df

@@ -1,4 +1,3 @@
-from pydub import AudioSegment
 import os
 from argparse import ArgumentParser
 import csv
@@ -72,10 +71,7 @@ def _transcribe_audios(paths, model):
     # parameter which model to use
     model = whisper.load_model(model)
 
-    torch.hub.download_url_to_file('https://models.silero.ai/vad_models/en.wav', 'en_example.wav')
-
-  
-    model, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
+    model_silence_detection, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
                                 model='silero_vad',
                                 force_reload=True,
                                 onnx=False)
@@ -94,17 +90,20 @@ def _transcribe_audios(paths, model):
         res = ''
 
         # silence detection
+        print(path)
         wav = read_audio(os.path.join(path), sampling_rate=SAMPLING_RATE)
         # get speech timestamps from full audio file
-        speech_timestamps = get_speech_timestamps(wav, model, sampling_rate=SAMPLING_RATE)
+        speech_timestamps = get_speech_timestamps(wav, model_silence_detection, sampling_rate=SAMPLING_RATE)
         if len(speech_timestamps) == 0:
+            print(f"no speech detected for {path}")
             res = ''
         else:
             # if files are too small then we get an error. This is a workaround
             try:
                 res = model.transcribe(os.path.join(path), fp16=False)
                 res = res['text']
-            except:
+            except Exception as e:
+                print(e)
                 print('File is too small to transcribe (path: ' + path + ')')
 
         match = re.search(pattern, path)

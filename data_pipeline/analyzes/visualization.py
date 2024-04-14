@@ -1,4 +1,3 @@
-from preprocessing import preprocessing
 import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 import pandas as pd
@@ -6,6 +5,7 @@ import numpy as np
 import os
 import random
 from adjustText import adjust_text
+import matplotlib.patches as mpatches
 
 
 def embedding_type(df, x_column, y_column, name="embedding_type.png", alpha = 0.8):
@@ -60,11 +60,11 @@ def embedding_text(df, x_column, y_column, text_column, name="embedding_type", a
         plt.title(label)
         # Save the figure as an image
         adjust_text(texts, only_move={'points':'y', 'texts':'y'}, arrowprops=dict(arrowstyle="->", color='k', lw=0.5))
-        plt.savefig(os.path.join('./images', f'{name}_{label}.svg'), bbox_inches="tight")   
+        plt.savefig(os.path.join('./images', f'{name}_{label}.svg'), bbox_inches="tight", dpi=600)   
         plt.clf()
         fig.clf()
 
-def embedding_simiar_word(df, x_column, y_column,  name="embedding_similar_word", alpha = 0.8):
+def embedding_simiar_word(df, x_column, y_column,  name="embedding_similar_word", alpha = 0.8, standardize = False):
     class_labels = df['type']  
 
     word_to_value = {
@@ -88,27 +88,36 @@ def embedding_simiar_word(df, x_column, y_column,  name="embedding_similar_word"
         "cannot be":1
     }
 
+    ticks = [17, 15,13,11,9,7,5,3,1]
+
     words = [      
         "definitely", 
-        "certain", 
-        "suspect that must",
-        #"im positive",  
-        "i remember", 
-        "maybe" ,
-        "i think so" ,
-        "it feels like" ,
-        "uncertain",
-        "uncertain"]
+        "certain",
+        "sure",
+        "i know",
+        "pretty sure",
+        "kind of",
+        "assume that",
+        "unsure",
+        "cannot be"
+    ]
+
     words.reverse()
+    ticks.reverse()
 
     for label in set(class_labels):
         fig, ax = plt.subplots()
         all = df.loc[df['type'] == label]
         x = all[x_column].values
         y = all[y_column].values
-        word_value = list(map(lambda x: word_to_value[x], all['highest_similarity'].values))
 
-        p2 = ax.scatter(x, y, alpha = alpha, c=word_value)
+        if standardize:
+            x = (x - x.mean()) / x.std()
+            y = (y - y.mean()) / y.std()
+
+        word_value = list(map(lambda x: word_to_value[x], all['most_similar_word'].values))
+
+        p2 = ax.scatter(x, y, alpha = alpha, c=word_value, vmin=1, vmax=17)
 
         # Add labels and legend
         plt.xlabel('Embedding Dimension 1')
@@ -118,9 +127,93 @@ def embedding_simiar_word(df, x_column, y_column,  name="embedding_similar_word"
 
         #plt.legend(loc='upper left', bbox_to_anchor=(1.02, 1))
         cbar = fig.colorbar(p2, ax=ax, label='Confidence Level')
+        cbar.set_ticks(ticks)
         cbar.set_ticklabels(words)
+        cbar.ax.set_ylim(1, 17)
         # Save the figure as an image
-        plt.savefig(os.path.join('./images', f'{name}_{label}.svg'), bbox_inches="tight")   
+        plt.savefig(os.path.join('./images/gradient/', f'{name}_{label}.png'), bbox_inches="tight", dpi=600)   
+        plt.clf()
+        fig.clf()
+
+def embedding_simiar_word_no_gradient(df, x_column, y_column,  name="embedding_similar_word", alpha = 0.8, standardize = False):
+    class_labels = df['type']  
+
+    word_to_color = {
+        "definitely": "lime",
+        "absolutely": "green",
+        "certain": "mediumseagreen",
+        "confidence": "springgreen",
+        "suspect that must": "forestgreen",
+        "sure": "darkgreen",
+        "im positive": "seagreen",
+        "i know": "limegreen",
+        "i remember": "chartreuse",
+        "pretty sure": "gold",
+        "maybe": "khaki",
+        "kind of": "darkgoldenrod",
+        "i think so": "orange",
+        "assume that": "coral",
+        "it feels like": "orangered",
+        "unsure": "peru",
+        "uncertain": "firebrick",
+        "cannot be": "red"
+    }
+
+    words_all = [
+        "definitely",
+        "absolutely",
+        "certain",
+        "confidence",
+        "suspect that must",
+        "sure", 
+        "im positive", 
+        "i know", 
+        "i remember", 
+        "pretty sure", 
+        "maybe", 
+        "kind of", 
+        "i think so", 
+        "assume that", 
+        "it feels like", 
+        "unsure", 
+        "uncertain", 
+        "cannot be"
+    ]
+
+    for label in set(class_labels):
+        fig, ax = plt.subplots()
+        all = df.loc[df['type'] == label]
+        x = all[x_column].values
+        y = all[y_column].values
+
+        if standardize:
+            x = (x - x.mean()) / x.std()
+            y = (y - y.mean()) / y.std()
+
+        words = all['most_similar_word'].values
+
+        legend_labels = []
+
+        for word_label in set(words):
+            indices = words == word_label
+            plt.scatter(x[indices], y[indices], alpha = alpha, c=word_to_color[word_label])
+        
+        for word_label in words_all:
+            legend_labels.append(mpatches.Patch(color=word_to_color[word_label], label=word_label))
+
+        
+
+        #plt.scatter(x, y, alpha = alpha, c=word_value, vmin=1, vmax=17, label=all['most_similar_word'].values)
+
+        # Add labels and legend
+        plt.xlabel('Embedding Dimension 1')
+        plt.ylabel('Embedding Dimension 2')
+        plt.title(label)
+
+
+        plt.legend(loc='upper left', bbox_to_anchor=(1.02, 1), handles=legend_labels)
+        # Save the figure as an image
+        plt.savefig(os.path.join('./images/color_per_label', f'{name}_{label}.png'), bbox_inches="tight", dpi=600)   
         plt.clf()
         fig.clf()
 
@@ -172,23 +265,29 @@ def clustering(df, n_clusters=3):
     plt.savefig('clustering.png')
     plt.clf()
 
-""" df = pd.read_csv('../../output/output_all.csv', delimiter=';')
-df = preprocessing(df) """
-#embedding_type(df)
-#Explained variance from PCA: [0.23471752 0.05519923]
-#embedding_type_3d(df, "embedding_reduced_pca_1", "embedding_reduced_pca_2", "embedding_reduced_pca_3", name="embedding_type_pca.png", x = [-0.4,-0.2], y= [0,0.5] ,z = [-0.04,0])
-""" embedding_type_3d(df, "embedding_reduced_pca_1", "embedding_reduced_pca_2", "embedding_reduced_pca_3", name="embedding_type_pca.png")
-embedding_type_3d(df, "embedding_reduced_tsne_1", "embedding_reduced_tsne_2", "embedding_reduced_tsne_3", name="embedding_type_tsne.png")
-embedding_type_3d(df, "embedding_reduced_both_1", "embedding_reduced_both_2", "embedding_reduced_both_3", name="embedding_type_both.png") """
-#clustering(df, n_clusters=2)
 
-""" embedding_type(df, "embedding_reduced_pca_1", "embedding_reduced_pca_2", name="embedding_type_pca.png")
-embedding_type(df, "embedding_reduced_tsne_1", "embedding_reduced_tsne_2", name="embedding_type_tsne.png")
-embedding_type(df, "embedding_reduced_both_1", "embedding_reduced_both_2", name="embedding_type_both.png") """
-#embedding_text(df, "embedding_reduced_pca_1", "embedding_reduced_pca_2", "transcribed_text", name="embedding_type_pca")
-#embedding_text(df, "embedding_reduced_tsne_1", "embedding_reduced_tsne_2", "transcribed_text", name="embedding_type_tsne")
+df = pd.read_csv('./output_zero_shot_new_post.csv', delimiter=';')
 
-df_new = pd.read_csv('./output.csv', delimiter=';')
-#df_new = preprocessing(df_new)
-embedding_simiar_word(df_new, "embedding_reduced_tsne_1", "embedding_reduced_tsne_2", name="embedding_similar_word_tsne")
-#embedding_text(df, "embedding_reduced_both_1", "embedding_reduced_both_2", "transcribed_text", name="embedding_type_both")
+
+df['most_similar_word'] = df['highest_similarity'].str.extract(r"\('([^']*)',\s*([^)]*)\)")[0]
+df['similarity_score'] = df['highest_similarity'].str.extract(r"\('([^']*)',\s*([^)]*)\)")[1]
+
+
+for mode in ["city", "country", "body"]:
+    df_mode = df.loc[df['word_type'] == mode]   
+    embedding_simiar_word_no_gradient(df_mode, "embedding_reduced_tsne_1", "embedding_reduced_tsne_2", name=f"embedding_similar_word_tsne_{mode}", standardize=True)
+    embedding_simiar_word_no_gradient(df_mode, "embedding_reduced_pca_1", "embedding_reduced_pca_2", name=f"embedding_similar_word_pca_{mode}", standardize=True)
+    embedding_simiar_word_no_gradient(df_mode, "embedding_reduced_both_1", "embedding_reduced_both_2", name=f"embedding_similar_word_both_{mode}", standardize=True)
+    embedding_simiar_word(df_mode, "embedding_reduced_tsne_1", "embedding_reduced_tsne_2", name=f"embedding_similar_word_tsne_{mode}", standardize=True)
+    embedding_simiar_word(df_mode, "embedding_reduced_pca_1", "embedding_reduced_pca_2", name=f"embedding_similar_word_pca_{mode}", standardize=True)
+    embedding_simiar_word(df_mode, "embedding_reduced_both_1", "embedding_reduced_both_2", name=f"embedding_similar_word_both_{mode}", standardize=True)
+
+embedding_simiar_word_no_gradient(df, "embedding_reduced_tsne_1", "embedding_reduced_tsne_2", name="embedding_similar_word_tsne", standardize=True)
+embedding_simiar_word_no_gradient(df, "embedding_reduced_pca_1", "embedding_reduced_pca_2", name="embedding_similar_word_pca", standardize=True)
+embedding_simiar_word_no_gradient(df, "embedding_reduced_both_1", "embedding_reduced_both_2", name="embedding_similar_word_both", standardize=True)
+embedding_simiar_word(df, "embedding_reduced_tsne_1", "embedding_reduced_tsne_2", name="embedding_similar_word_tsne", standardize=True)
+embedding_simiar_word(df, "embedding_reduced_pca_1", "embedding_reduced_pca_2", name="embedding_similar_word_pca", standardize=True)
+embedding_simiar_word(df, "embedding_reduced_both_1", "embedding_reduced_both_2", name="embedding_similar_word_both", standardize=True)
+
+
+
