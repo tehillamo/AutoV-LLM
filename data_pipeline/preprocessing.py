@@ -25,7 +25,7 @@ def toTensor(string):
 def preprocessing(df):
     df = df.loc[df['trial_type'] == 'slider']
     df['type'] = df['pair'].apply(lambda c: get_type_from_pair(c))
-    df = df[df["transcribed_text"].str.contains('Thank you') == False]
+    #df = df[df["transcribed_text"].str.contains('Thank you') == False]
 
     #df = convert_to_tensor(df, 'embedding')
     return df
