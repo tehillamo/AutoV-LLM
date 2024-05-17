@@ -1,15 +1,16 @@
 {
-    "input_path": "./ressources",
-    "output_path": "./output",
+    "input_path": "../output/output_newest.csv",
+    "output_path": "../output",
 
     "transcription_model": "large",
     "behavioral_columns": [ "stimulus", "response", "rt", "pair" ],
     "reduction_algorithm": [ "PCA", "TSNE", "both"],
     "dimension": 2,
 
-    "transcribe_text": true,
-    "word_cloud": true,
+    "transcribe_text": false,
+    "word_cloud": false,
     "text_classification": true,
-    "text_classes": ["certain", "uncertain", "sure", "unsure", "pretty sure", "maybe", "kind of", "i think so", "it feels like", "assume that", "definitely", "absolutely", "confidence", "suspect that must", "cannot be", "im positive", "i know", "i remember"]
-
+    "calculate_text_embeddings": false,
+    "dimensionality_reduction": false,
+    "text_classes": ["absolutely uncertain", "very uncertain", "somewhat uncertain", "a little uncertain", "a little certain", "somewhat certain", "very certain", "absolutely certain"]
 }

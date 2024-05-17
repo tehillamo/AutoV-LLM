@@ -9,8 +9,10 @@ from text_classification import text_classification
 import random
 import json
 import pandas as pd
+#"text_classes": ["certain", "uncertain", "sure", "unsure", "pretty sure", "maybe", "kind of", "i think so", "it feels like", "assume that", "definitely", "absolutely", "confidence", "suspect that must", "cannot be", "im positive", "i know", "i remember"]
 
 def main():
+    print("Starting data pipeline...")
     with open('./config.json') as handle:
         config = json.loads(handle.read())
         
@@ -19,22 +21,29 @@ def main():
     random.seed(543547)
 
     if config['transcribe_text']:
+        print("Transcribing audio...")
         df = transcribe(config['input_path'], config['transcription_model'])
     else:
         df = pd.read_csv(config['input_path'], sep=';')
         if 'transcribed_text' not in df.columns:
             raise ValueError('"transcribed_text" column not found in input file!')
-    df = create_embeddings(df, "transcribed_text", new_column_name = "embedding")
+        
+    if config['calculate_text_embeddings']:
+        print("Calculating text embeddings...")
+        df = create_embeddings(df, "transcribed_text", new_column_name = "embedding")
 
-    for algorithm in config['reduction_algorithm']:
-        df = reduce(df, "embedding", new_column_name = f"embedding_reduced_{algorithm}", reduction_algorithm = algorithm, dimension = config['dimension'])
-    
+    if config["dimensionality_reduction"]:
+        print("Reducing dimensionality...")
+        for algorithm in config['reduction_algorithm']:
+            df = reduce(df, "embedding", new_column_name = f"embedding_reduced_{algorithm}", reduction_algorithm = algorithm, dimension = config['dimension'])
+        
 
     # specify behavioral data columns which should be merged
     behavioral_columns = config['behavioral_columns']
     print(behavioral_columns)
 
     if config['transcribe_text']:
+        print("Merging behavioral data...")
         df = merge_behavioral_data(df, config['input_path'], behavioral_columns)
 
     # custom scripts to create needed features
@@ -46,6 +55,7 @@ def main():
         pass
 
     if config['text_classification']:
+        print("Classifying text...")
         df = text_classification(df, ["certain", "uncertain", "sure", "unsure", "pretty sure", "maybe", "kind of", "i think so", "it feels like", "assume that", "definitely", "absolutely", "confidence", "suspect that must", "cannot be", "im positive", "i know", "i remember"])
 
 
