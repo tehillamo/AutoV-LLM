@@ -7,6 +7,7 @@ ressources/*
 output/*
 # exception to the rule
 !output/.gitkeep
+!output/output_experiment.csv
 
 # exclude everything
 logs/*
@@ -17,7 +18,7 @@ test
 
 *.png
 *.wav
-*.csv
+#*.csv
 *.zip
 trial_data.txt
 *.log
