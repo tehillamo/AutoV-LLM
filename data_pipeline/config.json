@@ -9,8 +9,10 @@
 
     "transcribe_text": false,
     "word_cloud": false,
-    "text_classification": true,
-    "calculate_text_embeddings": false,
-    "dimensionality_reduction": false,
+    "ignore_words_in_word_cloud": ["Thank", "Thank you", "Thanks"],
+    "text_classification": false,
+    "calculate_text_embeddings": true,
+    "dimensionality_reduction": true,
     "text_classes": ["absolutely uncertain", "very uncertain", "somewhat uncertain", "a little uncertain", "a little certain", "somewhat certain", "very certain", "absolutely certain"]
+
 }

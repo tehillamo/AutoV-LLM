@@ -6,10 +6,13 @@ from dimensionality_reduction import reduce
 from merge_behavioral_data import merge_behavioral_data
 from custom_scripts import resolve_slider_items, get_trial_type
 from text_classification import text_classification
+from word_cloud import generate_word_cloud
 import random
 import json
 import pandas as pd
+from preprocessing import convert_to_tensor
 #"text_classes": ["certain", "uncertain", "sure", "unsure", "pretty sure", "maybe", "kind of", "i think so", "it feels like", "assume that", "definitely", "absolutely", "confidence", "suspect that must", "cannot be", "im positive", "i know", "i remember"]
+#"text_classes": ["absolutely uncertain", "very uncertain", "somewhat uncertain", "a little uncertain", "a little certain", "somewhat certain", "very certain", "absolutely certain"]
 
 def main():
     print("Starting data pipeline...")
@@ -34,6 +37,8 @@ def main():
 
     if config["dimensionality_reduction"]:
         print("Reducing dimensionality...")
+        if config['calculate_text_embeddings'] == False:
+            raise ValueError("Cannot reduce dimensionality without calculating text embeddings!")
         for algorithm in config['reduction_algorithm']:
             df = reduce(df, "embedding", new_column_name = f"embedding_reduced_{algorithm}", reduction_algorithm = algorithm, dimension = config['dimension'])
         
@@ -51,20 +56,19 @@ def main():
     df = resolve_slider_items(df)
 
     if config['word_cloud']:
-        # ??? TODO
-        pass
+        generate_word_cloud(df['transcribed_text'], config['ignore_words_in_word_cloud'], config['output_path'])
 
     if config['text_classification']:
         print("Classifying text...")
-        df = text_classification(df, ["certain", "uncertain", "sure", "unsure", "pretty sure", "maybe", "kind of", "i think so", "it feels like", "assume that", "definitely", "absolutely", "confidence", "suspect that must", "cannot be", "im positive", "i know", "i remember"])
+        df = text_classification(df, config['text_classes'])
 
 
     cols_embeddings = []
     for i in range(config['dimension']):
         cols_embeddings = cols_embeddings + [f"embedding_reduced_pca_{i+1}", f"embedding_reduced_tsne_{i+1}", f"embedding_reduced_both_{i+1}"]
         
-    cols = ["uuid", "trial_number", "transcribed_text", "embedding"] + ['slider_items', 'trial_type'] + behavioral_columns + cols_embeddings
-    df.to_csv(os.path.join(config['output_path'], "output.csv"), sep=';', index=False, columns=cols)
+    #cols = ["uuid", "trial_number", "transcribed_text", "embedding"] + ['slider_items', 'trial_type'] + behavioral_columns + cols_embeddings
+    df.to_csv(os.path.join(config['output_path'], "output.csv"), sep=';', index=False)
 
 
 

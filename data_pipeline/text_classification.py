@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from transformers import pipeline
 
+counter = 0
+
 
 def keyword_similarity(df):
     keywords = ["certain", "uncertain", "sure", "unsure", "pretty sure", "maybe", "kind of", "i think so", "it feels like", "assume that", "definitely", "absolutely", "confidence", "suspect that must", "cannot be", "im positive", "i know", "i remember"]
@@ -22,19 +24,26 @@ def keyword_similarity(df):
 
 def keyword_similarity_zero_shot(df, keywords):
     threshold = 0.14
+    global counter
+    counter = 0
     pipe = pipeline(model="facebook/bart-large-mnli")
     df['transcribed_text'].fillna('', inplace=True)
+    print(f"{len(df)} entries to classify")
     df['highest_similarity'] = df['transcribed_text'].apply(lambda x: zero_shot(x, pipe, keywords, threshold))
     return df
 
 def zero_shot(x, pipe, keywords, threshold = 0.14):
+    global counter
+    print(f"Zero shot: {counter}")
+    counter = counter + 1
     if len(x) == 0:
         return ('unknown', 0)
     result = pipe(x, candidate_labels=keywords)
-    if result['scores'][0] > threshold:
+    return (result['labels'][0], result['scores'][0])
+    """ if result['scores'][0] > threshold:
         return (result['labels'][0], result['scores'][0])
     else:
-        return ('unknown', result['scores'][0])
+        return ('unknown', result['scores'][0]) """
 
 def toTensor(string):
     string = string.replace("\n", "")

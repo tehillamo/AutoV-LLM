@@ -8,6 +8,7 @@ def create_embeddings(df, column, new_column_name = None):
     return embeddings
 
 def _embedding(df, column, model, new_column_name):
+    df[column] = df[column].astype(str)
     df[new_column_name] = df.apply(lambda row: _get_embedding(row, column, model), axis=1)
     return df
 

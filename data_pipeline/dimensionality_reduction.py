@@ -21,7 +21,6 @@ def pca(df, column, dimension, new_column_name):
     print(f"Explained variance from PCA: {pca.explained_variance_ratio_}")
     for i in range(dimension):
         df[f"{new_column_name}_{i+1}"] = df.apply(lambda row: pca.transform(np.asarray(row[column].reshape(1, -1)))[0][i], axis=1)
-    # df[new_column_name] = df.apply(lambda row: pca.transform(np.asarray(row[column].reshape(1, -1)))[0], axis=1)
     return df
 
 
