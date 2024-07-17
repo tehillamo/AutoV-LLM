@@ -20,8 +20,9 @@ This is a sample implementation of our automated verbal reports analysis framewo
     - [Speech2Text](#speech2text)
     - [Sentence Embeddings](#sentence-embeddings)
     - [Dimensionality Reduction](#dimensionality-reduction)
-    - [Custom Scripts](#custom-scripts)
+    - [Text Labelling](#text-labelling)
     - [Merge Behavioral Data](#merge-behavioral-data)
+    - [Input Configuration](#input-configuration)
     - [Output](#output)
   - [Citing \& Authors](#citing--authors)
   - [References](#references)
@@ -140,11 +141,30 @@ We implemented three techniques to reduce the dimensionality:
 - t-SNE
 - combination of PCA and t-SNE
 
-### [Custom Scripts](data_pipeline/custom_scripts.py)
-This is a collection of scripts we used for our analysis. These scripts may not be applicable to other scenarios, but we included them for the sake of completeness.
+### [Text Labelling](data_pipeline/text_classification.py)
+We use a zero-shot classification algorithm to find the most problable text label for a given text.
 
 ### [Merge Behavioral Data](data_pipeline/merge_behavioral_data.py)
 In the last step we merge the data obtained from the study with the earlier computed data (transcribed text, embeddings, lower dimensional embeddings).
+
+### Input Configuration
+In the [config file](data_pipeline/config.json) you can specify all parameters.
+| Parameter | Explanation |
+| :----------------: | :------ | 
+| input_path  | Path to the CSV file  |
+|  output_path | Path where the output file should be saved to  |
+|  transcription_model | Which Whisper model to use. See [here]([data_pipeline/config.json](https://github.com/openai/whisper)) for the different options  |
+|  behavioral_columns |  A list of the behavioral columns from jsPsych which should be merged into the output file |
+| reduction_algorithm  | Algorithm for dimensionality reduction, possible values: ("PCA", "TSNE", "both")  |
+|  dimension |  Dimension to which the embedding dimension should be reduced |
+| transcribe_text  | Perform speech to text (must provide input_path)  |
+|  word_cloud |  Create word cloud |
+| ignore_words_in_word_cloud  |  List of words to ignore in the word cloud |
+| text_classification  |  Perform the text labelling algorithm |
+|  calculate_text_embeddings |  Calculate the text embeddings |
+| dimensionality_reduction  |  Apply dimensionality reduction to the embeddings |
+| text_classes  | List of text classes for the text classification algorithm  |
+
 
 ### Output
 You can find the output of the evaluation script in `/output/`. The script produces a CSV file.
