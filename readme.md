@@ -1,5 +1,6 @@
 # Automated Analysis of Verbal Reports
 This is a sample implementation of our automated verbal reports analysis framework. The framework allows you to conduct your jsPsych study whilst recording the participants. Subsequently, analyses can be replicated by executing our data-pipeline.
+We also provide a more detailed guide [here](beginners_guide.pdf).
 ## Overview
 - [Automated Analysis of Verbal Reports](#automated-analysis-of-verbal-reports)
   - [Overview](#overview)
