@@ -66,7 +66,7 @@ Navigate in your browser to our GitHub repository [https://github.com/tehillamo/
  4. Start virtual environment `source venv/bin/activate`
  5. Run `pip install -r requirements.txt` to install python dependencies
  6. Install [ffmpeg](https://www.ffmpeg.org/download.html)
- 7. Start the corresponding script using `python scripts.py` and use `python scripts.py -h` for help
+ 7. Start the corresponding script using `python scripts.py`
 
 ## Setup Production (Server)
 ### Prerequisites
