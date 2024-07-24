@@ -14,5 +14,10 @@
     "calculate_text_embeddings": false,
     "dimensionality_reduction": false,
     "text_classes": ["absolutely uncertain", "very uncertain", "somewhat uncertain", "a little uncertain", "a little certain", "somewhat certain", "very certain", "absolutely certain"],
-    "keywords": true
+    "keywords": true,
+
+    "summarize": true,
+    "max_length_summary": 130,
+    "min_length_summary": 30
+
 }

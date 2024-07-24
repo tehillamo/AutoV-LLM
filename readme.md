@@ -165,6 +165,10 @@ In the [config file](data_pipeline/config.json) you can specify all parameters.
 |  calculate_text_embeddings |  Calculate the text embeddings |
 | dimensionality_reduction  |  Apply dimensionality reduction to the embeddings |
 | text_classes  | List of text classes for the text classification algorithm  |
+| keywords  | Compute keywords  |
+| summarize  | Compute summary  |
+| max_length_summary  | Maximum length of the summary  |
+| min_length_summary  | Minimum length of the summary  |
 
 
 ### Output
@@ -179,6 +183,8 @@ You can find the output of the evaluation script in `/output/`. The script produ
 | embedding_reduced_pca |  Lower dimensional embedding (PCA)   | 
 | embedding_reduced_tsne |  Lower dimensional embedding (t-SNE)   | 
 | embedding_reduced_both |  Lower dimensional embedding (first PCA to 50 dimensions, then t-SNE)   | 
+| keywords |  Keywords of transcribed text   | 
+| summary |  Summary of transcribed text   | 
 
 
 ## Citing & Authors

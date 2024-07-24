@@ -12,6 +12,7 @@ import json
 import pandas as pd
 from preprocessing import convert_to_tensor
 from keywords import extract_keywords_keybert
+from summarization import summarize
 #"text_classes": ["certain", "uncertain", "sure", "unsure", "pretty sure", "maybe", "kind of", "i think so", "it feels like", "assume that", "definitely", "absolutely", "confidence", "suspect that must", "cannot be", "im positive", "i know", "i remember"]
 #"text_classes": ["absolutely uncertain", "very uncertain", "somewhat uncertain", "a little uncertain", "a little certain", "somewhat certain", "very certain", "absolutely certain"]
 
@@ -71,6 +72,10 @@ def main():
     if config['keywords']:
         print("Extracting keywords...")
         df = extract_keywords_keybert(df, "transcribed_text", "keywords")
+
+    if config['summarize']:
+        print("Summarizing text...")
+        df = summarize(df, config['max_length_summary'], config['min_length_summary'])
         
     df.to_csv(os.path.join(config['output_path'], "output.csv"), sep=';', index=False)
 
