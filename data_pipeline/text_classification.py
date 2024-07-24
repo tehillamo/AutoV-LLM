@@ -5,6 +5,7 @@ from preprocessing import preprocessing
 import matplotlib.pyplot as plt
 import numpy as np
 from transformers import pipeline
+import warnings
 
 counter = 0
 
@@ -29,7 +30,13 @@ def keyword_similarity_zero_shot(df, keywords):
     pipe = pipeline(model="facebook/bart-large-mnli")
     df['transcribed_text'].fillna('', inplace=True)
     print(f"{len(df)} entries to classify")
-    df['highest_similarity'] = df['transcribed_text'].apply(lambda x: zero_shot(x, pipe, keywords, threshold))
+    #df['highest_similarity'] = df['transcribed_text'].apply(lambda x: zero_shot(x, pipe, keywords, threshold))
+
+    
+    warnings.filterwarnings('ignore')
+    df['highest_similarity'] = pipe(df['transcribed_text'].astype(str).tolist(), candidate_labels=keywords)
+    df['highest_similarity'] = df['highest_similarity'].apply(lambda x: (x['labels'][0], x['scores'][0]))
+
     return df
 
 def zero_shot(x, pipe, keywords, threshold = 0.14):
@@ -40,10 +47,6 @@ def zero_shot(x, pipe, keywords, threshold = 0.14):
         return ('unknown', 0)
     result = pipe(x, candidate_labels=keywords)
     return (result['labels'][0], result['scores'][0])
-    """ if result['scores'][0] > threshold:
-        return (result['labels'][0], result['scores'][0])
-    else:
-        return ('unknown', result['scores'][0]) """
 
 def toTensor(string):
     string = string.replace("\n", "")
