@@ -1,5 +1,5 @@
 {
-    "input_path": "../output/output_newest.csv",
+    "input_path": "../output/output_test.csv",
     "output_path": "../output",
 
     "transcription_model": "large",
@@ -11,8 +11,8 @@
     "word_cloud": false,
     "ignore_words_in_word_cloud": ["Thank", "Thank you", "Thanks"],
     "text_classification": false,
-    "calculate_text_embeddings": true,
-    "dimensionality_reduction": true,
-    "text_classes": ["absolutely uncertain", "very uncertain", "somewhat uncertain", "a little uncertain", "a little certain", "somewhat certain", "very certain", "absolutely certain"]
-
+    "calculate_text_embeddings": false,
+    "dimensionality_reduction": false,
+    "text_classes": ["absolutely uncertain", "very uncertain", "somewhat uncertain", "a little uncertain", "a little certain", "somewhat certain", "very certain", "absolutely certain"],
+    "keywords": true
 }

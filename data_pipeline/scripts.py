@@ -11,6 +11,7 @@ import random
 import json
 import pandas as pd
 from preprocessing import convert_to_tensor
+from keywords import extract_keywords_keybert
 #"text_classes": ["certain", "uncertain", "sure", "unsure", "pretty sure", "maybe", "kind of", "i think so", "it feels like", "assume that", "definitely", "absolutely", "confidence", "suspect that must", "cannot be", "im positive", "i know", "i remember"]
 #"text_classes": ["absolutely uncertain", "very uncertain", "somewhat uncertain", "a little uncertain", "a little certain", "somewhat certain", "very certain", "absolutely certain"]
 
@@ -66,8 +67,11 @@ def main():
     cols_embeddings = []
     for i in range(config['dimension']):
         cols_embeddings = cols_embeddings + [f"embedding_reduced_pca_{i+1}", f"embedding_reduced_tsne_{i+1}", f"embedding_reduced_both_{i+1}"]
+
+    if config['keywords']:
+        print("Extracting keywords...")
+        df = extract_keywords_keybert(df, "transcribed_text", "keywords")
         
-    #cols = ["uuid", "trial_number", "transcribed_text", "embedding"] + ['slider_items', 'trial_type'] + behavioral_columns + cols_embeddings
     df.to_csv(os.path.join(config['output_path'], "output.csv"), sep=';', index=False)
 
 

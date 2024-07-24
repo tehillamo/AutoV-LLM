@@ -5,11 +5,9 @@ import os
 def extract_keywords_keybert(df, column, output_column):
     kw_model = KeyBERT()
     df[output_column] = ''
-    df = df[column].apply(lambda c: kw_model.extract_keywords(str(c)))
-    df.to_csv("./output.csv", sep=';', index=False)
+    df[output_column] = kw_model.extract_keywords(df[column])
+    return df
 
 
-df = pd.read_csv("../output/output_medium_en.csv", delimiter=";")
-extract_keywords_keybert(df, "transcribed_text", "keywords")
 
 
