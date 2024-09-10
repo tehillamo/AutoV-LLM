@@ -71,21 +71,20 @@ app.post('/save', (req, res) => {
         'base64'
     )
 
-    audio_filename = "audio_" + req.body.index + ".wav";
+    audio_filename = "audio_" + req.body.index + "tmp.wav";
 
     uuid = req.body.uuid
-    try {
-        fs.writeFileSync(path.join(config.PATH_TO_RESSOURCES, uuid, audio_filename), buffer);
-    } catch (error) {
-        logger.warn(error)
-        console.log(error)
+    fs.writeFile(path.join(config.PATH_TO_RESSOURCES, uuid, audio_filename), buffer, function (err) {
+        if (err) {
+            return logger.error(err);
+        }
+
+        convert_audio(path.join(config.PATH_TO_RESSOURCES, uuid, audio_filename));
+
+        logger.info('Recording saved with uuid: ' + uuid + " and index: " + req.body.index);
         res.status(200);
         return res.send({ uuid: uuid });
-    }
-
-    logger.info('Recording saved with uuid: ' + uuid + " and index: " + req.body.index);
-    res.status(200);
-    return res.send({ uuid: uuid });
+    })
 
 });
 
@@ -148,18 +147,18 @@ app.delete('/delete', (req, res) => {
 });
 
 function convert_audio(file) {
-    console.log(file)
-    new_filename = file.slice(0, -3) + "mp3"
+    logger.info("Converting file: " + file)
+    new_filename = file.slice(0, -7) + ".wav"
     var outStream = fs.createWriteStream(new_filename);
     var command = new FfmpegCommand();
     command
         .input(file)
-        .toFormat("mp3")
-        .on('error', error => logger.error(`Encoding Error: ${error.message}`))
-        .on('exit', () => logger.warn('Audio recorder exited'))
-        .on('close', () => logger.warn('Audio recorder closed'))
+        .toFormat("wav")
+        .on('error', error => logger.warn(`Encoding Error: ${error.message}`))
+        .on('exit', () => logger.info('Audio recorder exited'))
+        .on('close', () => logger.info('Audio recorder closed'))
         .on('end', () => {
-            logger.info('Audio Transcoding succeeded !' + tmp_filename)
+            logger.info('Audio Transcoding succeeded !' + file)
 
             // delete tmp.wav
             try {
@@ -169,7 +168,7 @@ function convert_audio(file) {
                 console.log(error)
             }
         })
-        .pipe(outStream, { end: true });
+        .pipe(outStream);
 }
 
 function listWavFiles(directory) {
