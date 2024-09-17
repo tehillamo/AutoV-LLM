@@ -71,7 +71,7 @@ def main():
 
     if config['keywords']:
         print("Extracting keywords...")
-        df = extract_keywords_keybert(df, "transcribed_text", "keywords")
+        df = extract_keywords_keybert(df, "transcribed_text", "keywords", top_n_keywords=config["top_n_keywords"])
 
     if config['summarize']:
         print("Summarizing text...")

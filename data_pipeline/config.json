@@ -15,6 +15,7 @@
     "dimensionality_reduction": false,
     "text_classes": ["absolutely uncertain", "very uncertain", "somewhat uncertain", "a little uncertain", "a little certain", "somewhat certain", "very certain", "absolutely certain"],
     "keywords": true,
+    "top_n_keywords": 2,
 
     "summarize": true,
     "max_length_summary": 130,
