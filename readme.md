@@ -166,6 +166,7 @@ In the [config file](data_pipeline/config.json) you can specify all parameters.
 | dimensionality_reduction  |  Apply dimensionality reduction to the embeddings |
 | text_classes  | List of text classes for the text classification algorithm  |
 | keywords  | Compute keywords  |
+| top_n_keywords  | Select top n keywords, ordered by probability (top = highest probability) |
 | summarize  | Compute summary  |
 | max_length_summary  | Maximum length of the summary  |
 | min_length_summary  | Minimum length of the summary  |
