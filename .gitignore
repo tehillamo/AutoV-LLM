@@ -7,7 +7,8 @@ ressources/*
 output/*
 # exception to the rule
 !output/.gitkeep
-!output/output_experiment.csv
+!output/output_cleaned.csv
+!output/output_raw.csv
 
 # exclude everything
 logs/*
