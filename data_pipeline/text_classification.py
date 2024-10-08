@@ -32,10 +32,20 @@ def keyword_similarity_zero_shot(df, keywords):
     print(f"{len(df)} entries to classify")
     #df['highest_similarity'] = df['transcribed_text'].apply(lambda x: zero_shot(x, pipe, keywords, threshold))
 
+    # classify entries with text
+
+
     
     warnings.filterwarnings('ignore')
-    df['highest_similarity'] = pipe(df['transcribed_text'].astype(str).tolist(), candidate_labels=keywords)
-    df['highest_similarity'] = df['highest_similarity'].apply(lambda x: (x['labels'][0], x['scores'][0]))
+
+    # get all indices where the transcribed_text is not empty
+    indices_with_text = df[df['transcribed_text'].str.strip() != ''].index
+
+    # only classify entries with text
+    df['highest_similarity'] = ""
+    df.loc[indices_with_text, 'highest_similarity'] = pipe(df.loc[indices_with_text, 'transcribed_text'].astype(str).tolist(), candidate_labels=keywords)
+    df.loc[indices_with_text, 'highest_similarity'] = df.loc[indices_with_text, 'highest_similarity'].apply(lambda x: (x['labels'][0], x['scores'][0]))
+
 
     return df
 

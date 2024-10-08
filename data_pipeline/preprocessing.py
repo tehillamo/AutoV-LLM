@@ -2,6 +2,9 @@ import json
 import torch
 
 def get_type_from_pair(pair):
+    if not pair or len(pair) == 0 or pair == "undefined":
+        return ""
+    
     pair = pair.replace("'", '"')
     json_data = json.loads(pair)
     pair_1 = list(json_data['pairs_1'].keys())[0]
@@ -23,7 +26,7 @@ def toTensor(string):
 
 
 def preprocessing(df):
-    df = df.loc[df['trial_type'] == 'slider']
+    #df = df.loc[df['trial_type'] == 'slider']
     df['type'] = df['pair'].apply(lambda c: get_type_from_pair(c))
     #df = df[df["transcribed_text"].str.contains('Thank you') == False]
 

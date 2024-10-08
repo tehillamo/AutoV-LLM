@@ -64,7 +64,6 @@ def main():
         print("Classifying text...")
         df = text_classification(df, config['text_classes'])
 
-
     cols_embeddings = []
     for i in range(config['dimension']):
         cols_embeddings = cols_embeddings + [f"embedding_reduced_pca_{i+1}", f"embedding_reduced_tsne_{i+1}", f"embedding_reduced_both_{i+1}"]
@@ -77,7 +76,7 @@ def main():
         print("Summarizing text...")
         df = summarize(df, config['max_length_summary'], config['min_length_summary'])
         
-    df.to_csv(os.path.join(config['output_path'], "output.csv"), sep=';', index=False)
+    df.to_csv(os.path.join(config['output_path']), sep=';', index=False)
 
 
 
