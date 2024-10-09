@@ -47,7 +47,7 @@ git clone https://github.com/tehillamo/LLM.git
 ```
 
 ### Download Zip file
-Navigate in your browser to our GitHub repository [https://github.com/tehillamo/LLM](https://github.com/tehillamo/LLM). Then click on the green button `<> Code` and click on `Download ZIP`. After that, you need to unzip the file in a folder of your choice.
+Navigate in your browser to our GitHub repository [https://github.com/tehillamo/AutoV-LLM](https://github.com/tehillamo/AutoV-LLM). Then click on the green button `<> Code` and click on `Download ZIP`. After that, you need to unzip the file in a folder of your choice.
 
 ## Setup Development
 ### Prerequisites
