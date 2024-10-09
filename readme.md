@@ -43,7 +43,7 @@ git --version
 ```
 If Git is not installed, you need to install [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git). Then open your terminal and navigate to a preferred folder and run:
 ```
-git clone https://github.com/tehillamo/LLM.git
+git clone https://github.com/tehillamo/AutoV-LLM.git
 ```
 
 ### Download Zip file
