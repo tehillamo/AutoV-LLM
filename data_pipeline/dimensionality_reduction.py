@@ -9,9 +9,12 @@ def reduce(df, column, reduction_algorithm = "PCA", dimension = 3, new_column_na
         participants = df['uuid'].unique()
         for participant in participants:
             print(f"Reducing dimensionality for participant {participant} using {reduction_algorithm}...")
-            df_participant = df[df['uuid'] == participant]
+            df_participant = df[df['uuid'] == participant].copy()
             df_participant = reduce(df_participant, column, reduction_algorithm, dimension, new_column_name, per_participant=False)
-            df.loc[df['uuid'] == participant, :] = df_participant
+            
+            # Update only new columns for the participant
+            new_columns = df_participant.columns.difference(df.columns)
+            df.loc[df['uuid'] == participant, new_columns] = df_participant[new_columns]
         return df
     
     if new_column_name == None:
