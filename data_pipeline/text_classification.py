@@ -23,18 +23,13 @@ def keyword_similarity(df):
     df['highest_similarity'] = df['highest_similarity'].apply(lambda x: x.replace('_similarity',''))
     return df, keywords
 
-def keyword_similarity_zero_shot(df, keywords):
-    threshold = 0.14
+def keyword_similarity_zero_shot(df, keywords, threshold = 0.14):
     global counter
     counter = 0
     pipe = pipeline(model="facebook/bart-large-mnli")
     df['transcribed_text'].fillna('', inplace=True)
     print(f"{len(df)} entries to classify")
     #df['highest_similarity'] = df['transcribed_text'].apply(lambda x: zero_shot(x, pipe, keywords, threshold))
-
-    # classify entries with text
-
-
     
     warnings.filterwarnings('ignore')
 
@@ -45,6 +40,9 @@ def keyword_similarity_zero_shot(df, keywords):
     df['highest_similarity'] = ""
     df.loc[indices_with_text, 'highest_similarity'] = pipe(df.loc[indices_with_text, 'transcribed_text'].astype(str).tolist(), candidate_labels=keywords)
     df.loc[indices_with_text, 'highest_similarity'] = df.loc[indices_with_text, 'highest_similarity'].apply(lambda x: (x['labels'][0], x['scores'][0]))
+
+    # remove entries with too low confidence
+    df['highest_similarity'] = df['highest_similarity'].apply(lambda x: x if x[1] > threshold else ('unknown', x[1]))
 
 
     return df
@@ -65,7 +63,7 @@ def toTensor(string):
     splitted = list(map(lambda x: float(x), string_filtered))
     return torch.tensor(splitted, dtype=torch.float)
 
-def text_classification(df, text_classes):
+def text_classification(df, text_classes, treshold):
     df = preprocessing(df)
-    df = keyword_similarity_zero_shot(df, text_classes)
+    df = keyword_similarity_zero_shot(df, text_classes, treshold)
     return df

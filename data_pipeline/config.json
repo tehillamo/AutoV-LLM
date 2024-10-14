@@ -1,6 +1,6 @@
 {
-    "input_path": "../output/output_newest.csv",
-    "output_path": "../output/output_raw.csv",
+    "input_path": "../output/output__.csv",
+    "output_path": "../output/output__.csv",
 
     "transcription_model": "large",
     "behavioral_columns": [ "stimulus", "response", "rt", "pair" ],
@@ -11,6 +11,7 @@
     "word_cloud": true,
     "ignore_words_in_word_cloud": ["Thank", "Thank you", "Thanks"],
     "text_classification": true,
+    "text_classification_threshold": 0,
     "calculate_text_embeddings": true,
     "dimensionality_reduction": true,
     "text_classes": ["absolutely uncertain", "very uncertain", "somewhat uncertain", "a little uncertain", "a little certain", "somewhat certain", "very certain", "absolutely certain"],

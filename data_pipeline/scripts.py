@@ -62,7 +62,7 @@ def main():
 
     if config['text_classification']:
         print("Classifying text...")
-        df = text_classification(df, config['text_classes'])
+        df = text_classification(df, config['text_classes'], config['text_classification_threshold'])
 
     cols_embeddings = []
     for i in range(config['dimension']):
