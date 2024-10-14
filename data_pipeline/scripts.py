@@ -45,9 +45,6 @@ def main():
         for algorithm in config['reduction_algorithm']:
             df = reduce(df, "embedding", new_column_name = f"embedding_reduced_{algorithm}", reduction_algorithm = algorithm, 
                         dimension = config['dimension'], per_participant = config['reduction_per_participant'])
-    
-    # print all columns
-    print(df.columns)
 
     # specify behavioral data columns which should be merged
     behavioral_columns = config['behavioral_columns']
