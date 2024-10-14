@@ -1,11 +1,12 @@
 {
-    "input_path": "../output/output__.csv",
-    "output_path": "../output/output__.csv",
+    "input_path": "../output/test.csv",
+    "output_path": "../output/test_output.csv",
 
     "transcription_model": "large",
     "behavioral_columns": [ "stimulus", "response", "rt", "pair" ],
     "reduction_algorithm": [ "PCA", "TSNE", "both"],
     "dimension": 2,
+    "reduction_per_participant": true,
 
     "transcribe_text": true,
     "word_cloud": true,

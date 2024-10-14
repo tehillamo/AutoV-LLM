@@ -10,6 +10,7 @@ from word_cloud import generate_word_cloud
 import random
 import json
 import pandas as pd
+pd.options.mode.chained_assignment = None  # default='warn'
 from preprocessing import convert_to_tensor
 from keywords import extract_keywords_keybert
 from summarization import summarize
@@ -42,7 +43,8 @@ def main():
         if config['calculate_text_embeddings'] == False:
             raise ValueError("Cannot reduce dimensionality without calculating text embeddings!")
         for algorithm in config['reduction_algorithm']:
-            df = reduce(df, "embedding", new_column_name = f"embedding_reduced_{algorithm}", reduction_algorithm = algorithm, dimension = config['dimension'])
+            df = reduce(df, "embedding", new_column_name = f"embedding_reduced_{algorithm}", reduction_algorithm = algorithm, 
+                        dimension = config['dimension'], per_participant = config['reduction_per_participant'])
         
 
     # specify behavioral data columns which should be merged
@@ -54,8 +56,8 @@ def main():
         df = merge_behavioral_data(df, config['input_path'], behavioral_columns)
 
     # custom scripts to create needed features
-    df = get_trial_type(df)
-    df = resolve_slider_items(df)
+    #df = get_trial_type(df)
+    #df = resolve_slider_items(df)
 
     if config['word_cloud']:
         generate_word_cloud(df['transcribed_text'], config['ignore_words_in_word_cloud'], config['output_path'])

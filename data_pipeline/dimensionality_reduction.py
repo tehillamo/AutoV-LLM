@@ -4,7 +4,16 @@ import numpy as np
 from sklearn.manifold import TSNE
 
 
-def reduce(df, column, reduction_algorithm = "PCA", dimension = 3, new_column_name = None):
+def reduce(df, column, reduction_algorithm = "PCA", dimension = 3, new_column_name = None, per_participant = False):
+    if per_participant:
+        participants = df['uuid'].unique()
+        for participant in participants:
+            print(f"Reducing dimensionality for participant {participant} using {reduction_algorithm}...")
+            df_participant = df[df['uuid'] == participant]
+            df_participant = reduce(df_participant, column, reduction_algorithm, dimension, new_column_name, per_participant=False)
+            df.loc[df['uuid'] == participant, :] = df_participant
+        return df
+    
     if new_column_name == None:
         new_column_name = f"{column}_reduced_{reduction_algorithm}"
     if reduction_algorithm == "PCA":
