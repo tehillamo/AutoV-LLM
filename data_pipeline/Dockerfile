@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:3.10-bullseye
 
 WORKDIR /usr/src/app
 
@@ -13,5 +13,5 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get install -y --no-install-r
 
 COPY . .
 
-CMD [ "python", "scripts.py"]
+CMD [ "python", "-u", "scripts.py", "--device", "cpu"]
 #python3 scripts.py --path ../ressources --output ../output --behavioral_columns stimulus response rt pair

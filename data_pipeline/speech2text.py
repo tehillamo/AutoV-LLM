@@ -1,21 +1,27 @@
 import os
 from argparse import ArgumentParser
 import csv
+import json
 import whisper
 import pandas as pd
 from utils import get_uuids
 import re
 import torch
 
+#print(torch.cuda.is_available(), flush=True)
 
 SAMPLING_RATE = 16000
 __file_ending = ".wav"
 
 
-def transcribe(path, model):       
+def transcribe(path, model, device):       
     """
     Transcribes audio files located in the specified path.
-    
+    Parameters:
+        path (str):
+        model (str): The model to use for transcribing
+        device (str: "cuda", "cpu"): hardware device to run the model on
+
     :return: A pandas DataFrame containing the transcribed text for each audio file.
     """
     # find all uuids in ressource path
@@ -30,7 +36,7 @@ def transcribe(path, model):
     for uuid in uuids:
         print(uuid)
         paths = _get_all_cutted_audios(os.path.join(path, uuid))
-        transcribed = _transcribe_audios(paths, model)
+        transcribed = _transcribe_audios(paths, model, device)
         for text, i in transcribed:
             new_row = {
                 'uuid': str(uuid),
@@ -57,19 +63,24 @@ def _get_all_cutted_audios(path):
             files.append(os.path.join(path, file))
     return files
 
-def _transcribe_audios(paths, model):
+def _transcribe_audios(paths, model, device):
     """
     Transcribes a list of audio files using the Whisper library.
 
     Args:
         paths (List[str]): A list of file paths to audio files.
         model (str): The model to use for transcribing
+        device (str: "cuda", "cpu"): hardware device to run the model on
 
     Returns:
         List[str]: A list of transcribed text for each audio file.
     """
+
+    with open('./config.json') as handle:
+        config = json.loads(handle.read())
+
     # parameter which model to use
-    model = whisper.load_model(model)
+    model = whisper.load_model(model, device=device, download_root=config["cache_path"])
 
     model_silence_detection, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
                                 model='silero_vad',
@@ -88,7 +99,6 @@ def _transcribe_audios(paths, model):
 
     for path in paths:
         res = ''
-
         # silence detection
         print(path)
         wav = read_audio(os.path.join(path), sampling_rate=SAMPLING_RATE)
@@ -100,7 +110,7 @@ def _transcribe_audios(paths, model):
         else:
             # if files are too small then we get an error. This is a workaround
             try:
-                res = model.transcribe(os.path.join(path), fp16=False)
+                res = model.transcribe(os.path.join(path), fp16=False, verbose=True)
                 res = res['text']
             except Exception as e:
                 print(e)

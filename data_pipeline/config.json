@@ -1,6 +1,7 @@
 {
-    "input_path": "../output/test.csv",
-    "output_path": "../output/test_output.csv",
+    "input_path": "../ressources",
+    "output_path": "../output",
+    "cache_path": "../cache",
 
     "transcription_model": "large",
     "behavioral_columns": [ "stimulus", "response", "rt", "pair" ],

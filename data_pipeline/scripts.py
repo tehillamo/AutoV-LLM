@@ -18,6 +18,11 @@ from summarization import summarize
 #"text_classes": ["absolutely uncertain", "very uncertain", "somewhat uncertain", "a little uncertain", "a little certain", "somewhat certain", "very certain", "absolutely certain"]
 
 def main():
+
+    parser = argparse.ArgumentParser(description="")
+    parser.add_argument('--device', type=str, default="cpu", help="Device to run the whisper model on")
+    args = parser.parse_args()
+
     print("Starting data pipeline...")
     with open('./config.json') as handle:
         config = json.loads(handle.read())
@@ -28,7 +33,7 @@ def main():
 
     if config['transcribe_text']:
         print("Transcribing audio...")
-        df = transcribe(config['input_path'], config['transcription_model'])
+        df = transcribe(config['input_path'], config['transcription_model'], args.device)
     else:
         df = pd.read_csv(config['input_path'], sep=';')
         if 'transcribed_text' not in df.columns:

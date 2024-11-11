@@ -3,6 +3,8 @@ ressources/*
 # exception to the rule
 !ressources/.gitkeep
 
+cache
+
 # exclude everything
 output/*
 # exception to the rule
