@@ -26,10 +26,6 @@ dataset = ContrastiveTensionDataLoader(
     texts, batch_size=8, pos_neg_ratio=8
 )
 
-""" dataset = Dataset.from_dict({
-    #"texts": texts,
-}) """
-
 # Load pre-trained model
 model_name = "all-MiniLM-L6-v2"
 model = SentenceTransformer(model_name)
@@ -41,7 +37,7 @@ model.fit(
     train_objectives=[(dataset, loss)],
     epochs=1,
     optimizer_params={"lr": 5e-5},
-    checkpoint_path='models/miniLM-unsupervised',
+    checkpoint_path='models/miniLM-finetuned',
     show_progress_bar=True,
     use_amp=False,  # Set to True, if your GPU supports FP16 cores
 )
