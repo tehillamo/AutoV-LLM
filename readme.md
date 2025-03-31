@@ -55,19 +55,20 @@ Navigate in your browser to our GitHub repository [https://github.com/tehillamo/
 
 ### Setup of Experiment Website and Back-End Server
  1. Open your terminal and navigate to our framework folder
- 2. Run `cd LLM/webserver` to step into the webserver folder
+ 2. Run `cd AUTOV-LLM/webserver` to step into the webserver folder
  3. Run `npm install` to install all dependencies
  4. Run `npm run dev` to start the webserver
  5. Available in browser under `http:://localhost:8000`
 
 ### Run the Data-Pipeline 
  1. Open your terminal and navigate to our framework folder
- 2. Run `cd LLM/data_pipeline` to step into the data pipeline folder
+ 2. Run `cd AUTOV-LLM/data_pipeline` to step into the data pipeline folder
  3. We would recommend to create a virtual environment with `python -m venv venv`. If you do not want to do that skip to step 5
  4. Start virtual environment `source venv/bin/activate`
  5. Run `pip install -r requirements.txt` to install python dependencies
- 6. Install [ffmpeg](https://www.ffmpeg.org/download.html)
- 7. Start the corresponding script using `python scripts.py`
+ 6. Install [ffmpeg](https://www.ffmpeg.org/download.html) (required version >=4.1 and <= 4.4)
+    * MacOS: `brew install ffmpeg@4` and `brew link ffmpeg@4`
+ 7. Start the corresponding script using `python -u scripts.py`
 
 ## Setup Production (Server)
 ### Prerequisites
@@ -75,16 +76,17 @@ Navigate in your browser to our GitHub repository [https://github.com/tehillamo/
   
 ### Setup of Experiment Website and Back-End Server
  1. Open your terminal and navigate to our framework folder
- 2. Run `cd LLM/webserver` to step into the webserver folder
- 3. Run `docker-compose -f docker-compose-prod.yaml up --build -d` to start the docker container 
+ 2. Run `cd AUTOV-LLM/webserver` to step into the webserver folder
+ 3. Run `docker compose -f docker-compose-prod.yaml up --build -d` to start the docker container 
  4. Available in browser under `http:://localhost:8080`
- 5. To stop the container use `docker-compose stop`
+ 5. To stop the container use `docker compose stop`
 
 ### Run the Data-Pipeline
  1. Open your terminal and navigate to our framework folder
- 2. Run `cd LLM/data_pipeline` to step into the data pipeline folder
- 3. Run `docker-compose up -d` to start the docker container 
- 4. To stop the container use `docker-compose stop`
+ 2. Run `cd AUTOV-LLM/data_pipeline` to step into the data pipeline folder
+ 3. Run `docker compose up` to start the docker container and run the whisper model on cpu.
+    * use `docker compose -f docker-compose-gpu.yaml up` for a speedup if you have a cuda compatible gpu
+ 4. To stop the container use `docker compose stop`
 
 ---
 

@@ -5,6 +5,7 @@ services:
     # change if needed (adjusts the permission of the generated folder)
     # user: 1000:1000
     volumes:
-      - ../output:/usr/src/app/output
-      - ../ressources:/usr/src/app/ressources
+      - ../output:/usr/src/output
+      - ../ressources:/usr/src/ressources
+      - ../cache:/usr/src/cache
 

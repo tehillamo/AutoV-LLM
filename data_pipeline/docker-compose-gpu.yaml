@@ -1,0 +1,20 @@
+services:
+  speech2text:
+    init: true
+    build:
+      context: .
+      dockerfile: DockerfileGPU
+    deploy:
+      resources:
+          reservations:
+            devices:
+              - driver: nvidia
+                count: all 
+                capabilities: [gpu]
+    # change if needed (adjusts the permission of the generated folder)
+    # user: 1000:1000
+    volumes:
+      - ../output:/usr/src/output
+      - ../ressources:/usr/src/ressources
+      - ../cache:/usr/src/cache
+
