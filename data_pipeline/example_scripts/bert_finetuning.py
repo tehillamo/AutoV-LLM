@@ -49,6 +49,9 @@ model.fit(
 # Save the fine-tuned model
 model.save('models/miniLM-finetuned')
 
+""" 
+Example:
+
 # Load the fine-tuned model
 fine_tuned_model = SentenceTransformer('models/miniLM-finetuned')
 
@@ -56,4 +59,5 @@ fine_tuned_model = SentenceTransformer('models/miniLM-finetuned')
 test_texts = ["This is a test sentence.", "Another example sentence."]
 embeddings = fine_tuned_model.encode(test_texts)
 print(embeddings)
-print("Embeddings generated for test texts.")
+print("Embeddings generated for test texts.") ""
+"""
