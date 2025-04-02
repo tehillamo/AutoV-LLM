@@ -13,6 +13,7 @@ The training data is assumed to be in a CSV format with the following columns:
 - 'label': The label for the text. This should be a string that can be converted to a ClassLabel.
 
 To assess the model's performance, you must provide a test dataset in the same format.
+Note that all labels must be present in the training dataset.
 
 Make sure to have the required libraries installed:
 pip install transformers datasets torch pandas
