@@ -41,7 +41,7 @@ def main():
         
     if config['calculate_text_embeddings']:
         print("Calculating text embeddings...")
-        df = create_embeddings(df, "transcribed_text", new_column_name = "embedding")
+        df = create_embeddings(df, "transcribed_text", new_column_name = "embedding", model_name = config['bert_finetuned_model'])
 
     if config["dimensionality_reduction"]:
         print("Reducing dimensionality...")
@@ -68,7 +68,7 @@ def main():
 
     if config['text_classification']:
         print("Classifying text...")
-        df = text_classification(df, config['text_classes'], config['text_classification_threshold'])
+        df = text_classification(df, config['text_classes'], config['text_classification_threshold'], config['zero_shot_text_finetuned_model'])
 
     cols_embeddings = []
     for i in range(config['dimension']):

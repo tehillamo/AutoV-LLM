@@ -172,6 +172,8 @@ In the [config file](data_pipeline/config.json) you can specify all parameters.
 | summarize  | Compute summary  |
 | max_length_summary  | Maximum length of the summary  |
 | min_length_summary  | Minimum length of the summary  |
+| zero_shot_text_finetuned_model | Path to fine-tuned text-classification model. Leave null if you do not have a fine-tuned model. |
+| bert_finetuned_model | Path to fine-tuned embedding model. Leave null if you do not have a fine-tuned model. You can also specify any SentenceBERT model. |
 
 
 ### Output

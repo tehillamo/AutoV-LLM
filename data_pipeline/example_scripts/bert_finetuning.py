@@ -1,5 +1,9 @@
-#pip install transformers==4.45.2 sentence-transformers==3.1.1
+# pip install transformers==4.45.2 sentence-transformers==3.1.1
 # https://github.com/UKPLab/sentence-transformers/issues/3021
+
+""" 
+This script allows you to fine-tune the SentenceBERT model to obtain better sentence embeddings for your specific dataset.
+"""
 import pandas as pd
 from datasets import Dataset
 from sentence_transformers import (
@@ -15,7 +19,7 @@ import logging
 import math
 
 # Load the data
-df = pd.read_csv('../../output/output_raw.csv', sep=';')
+df = pd.read_csv('../../output/output_raw.csv', sep=';') # Input Data
 texts = df['transcribed_text'].fillna('').tolist()
 texts = [str(text) for text in texts if text is not None and len(text) > 10]  # Ensure no empty strings
 # Filter out NoneType values from the texts list
@@ -48,7 +52,7 @@ model.save('models/miniLM-finetuned')
 # Load the fine-tuned model
 fine_tuned_model = SentenceTransformer('models/miniLM-finetuned')
 
-# Test and lo the fine-tuned model
+# Test and load the fine-tuned model
 test_texts = ["This is a test sentence.", "Another example sentence."]
 embeddings = fine_tuned_model.encode(test_texts)
 print(embeddings)

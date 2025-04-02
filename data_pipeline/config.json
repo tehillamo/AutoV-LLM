@@ -1,6 +1,6 @@
 {
     "input_path": "../ressources",
-    "output_path": "../output",
+    "output_path": "../output/result.csv",
     "cache_path": "../cache",
 
     "transcription_model": "large",
@@ -9,19 +9,21 @@
     "dimension": 2,
     "reduction_per_participant": false,
 
-    "transcribe_text": true,
-    "word_cloud": true,
+    "transcribe_text": false,
+    "word_cloud": false,
     "ignore_words_in_word_cloud": ["Thank", "Thank you", "Thanks"],
-    "text_classification": true,
+    "text_classification": false,
     "text_classification_threshold": 0,
     "calculate_text_embeddings": true,
-    "dimensionality_reduction": true,
+    "dimensionality_reduction": false,
     "text_classes": ["absolutely uncertain", "very uncertain", "somewhat uncertain", "a little uncertain", "a little certain", "somewhat certain", "very certain", "absolutely certain"],
-    "keywords": true,
+    "keywords": false,
     "top_n_keywords": 2,
 
-    "summarize": true,
+    "summarize": false,
     "max_length_summary": 130,
-    "min_length_summary": 30
+    "min_length_summary": 30,
 
+    "zero_shot_text_finetuned_model": null,
+    "bert_finetuned_model": null
 }
