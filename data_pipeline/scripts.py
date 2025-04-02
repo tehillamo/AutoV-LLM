@@ -14,6 +14,7 @@ pd.options.mode.chained_assignment = None  # default='warn'
 from preprocessing import convert_to_tensor
 from keywords import extract_keywords_keybert
 from summarization import summarize
+from openai_script import openai_prompting, openai_embeddings
 #"text_classes": ["certain", "uncertain", "sure", "unsure", "pretty sure", "maybe", "kind of", "i think so", "it feels like", "assume that", "definitely", "absolutely", "confidence", "suspect that must", "cannot be", "im positive", "i know", "i remember"]
 #"text_classes": ["absolutely uncertain", "very uncertain", "somewhat uncertain", "a little uncertain", "a little certain", "somewhat certain", "very certain", "absolutely certain"]
 
@@ -40,8 +41,12 @@ def main():
             raise ValueError('"transcribed_text" column not found in input file!')
         
     if config['calculate_text_embeddings']:
-        print("Calculating text embeddings...")
-        df = create_embeddings(df, "transcribed_text", new_column_name = "embedding", model_name = config['bert_finetuned_model'])
+        if config['use_openai_embeddings']:
+            print("Calculating text embeddings using OpenAI...")
+            df = openai_embeddings(df, "transcribed_text", "embedding", config['openai_embeddings_model'], config['openai_api_key'])
+        else:
+            print("Calculating text embeddings...")
+            df = create_embeddings(df, "transcribed_text", new_column_name = "embedding", model_name = config['bert_finetuned_model'])
 
     if config["dimensionality_reduction"]:
         print("Reducing dimensionality...")
@@ -81,7 +86,11 @@ def main():
     if config['summarize']:
         print("Summarizing text...")
         df = summarize(df, config['max_length_summary'], config['min_length_summary'])
-        
+
+    if config['use_openai_prompting']:
+        print("Using OpenAI prompting...")
+        df = openai_prompting(df, "transcribed_text", "openai_response", config['developer_prompt'], config['openai_model'], config['openai_api_key'])
+    
     df.to_csv(os.path.join(config['output_path']), sep=';', index=False)
 
 

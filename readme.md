@@ -174,6 +174,13 @@ In the [config file](data_pipeline/config.json) you can specify all parameters.
 | min_length_summary  | Minimum length of the summary  |
 | zero_shot_text_finetuned_model | Path to fine-tuned text-classification model. Leave null if you do not have a fine-tuned model. |
 | bert_finetuned_model | Path to fine-tuned embedding model. Leave null if you do not have a fine-tuned model. You can also specify any SentenceBERT model. |
+|openai_api_key| API key for OpenAI|
+| use_openai_prompting | Flag to use OpenAI prompting. The prompt will be the transcribed text. Note that you must provide an OpenAI API key! |
+| use_openai_embeddings | Flag to use OpenAI text embeddings. Note that you must provide an OpenAI API key! calculate_text_embeddings must be also set to true |
+| developer_prompt | Developer prompt for the Prompting script, i.e. instructions for the Model |
+| openai_model | Specific model for prompting |
+| openai_embeddings_model | Specific model for embeddings |
+
 
 
 ### Output

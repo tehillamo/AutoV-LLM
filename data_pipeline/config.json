@@ -9,7 +9,7 @@
     "dimension": 2,
     "reduction_per_participant": false,
 
-    "transcribe_text": false,
+    "transcribe_text": true,
     "word_cloud": false,
     "ignore_words_in_word_cloud": ["Thank", "Thank you", "Thanks"],
     "text_classification": false,
@@ -23,6 +23,13 @@
     "summarize": false,
     "max_length_summary": 130,
     "min_length_summary": 30,
+
+    "use_openai_prompting": false,
+    "use_openai_embeddings": false,
+    "developer_prompt": "Tell me if this is positive or negative sentiment.",
+    "openai_model": "gpt-4o-mini",
+    "openai_embeddings_model": "text-embedding-3-small",
+    "openai_api_key": "<API_KEY_PLACEHOLDER>",
 
     "zero_shot_text_finetuned_model": null,
     "bert_finetuned_model": null
