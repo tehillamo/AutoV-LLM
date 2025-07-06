@@ -1,0 +1,15 @@
+def post_asr_correction_prompt():
+    return """
+    I have conducted a psychological study. I have recordings of what the participants said. The participants speak english I transcribed the recordings using a transcription model. The problem is that the transcriptions are not optimal. 
+    Here are relevant words that were included in the study and that the participants are likely to have said:
+    ape, bard, bile, blitz, brink, brook, broth, bruise, bunt, caste,chalk, cheat, chess, chick, chop, clam, cloak, clot, clown, cluck, coop, crook, crumb, darn, dew, doom, drone, dwarf, elm, farce, feast, fiend, flare, flaw, float, fuzz, gasp, geese, gleam, gloat, goal, gone, grime, grove, halt, haste, haul, heed, heist, hum, jolt, jute, lamb, lark, leak, leer, loaf, mace, mash, meal, meat, mime, moat, moot, mute, nark, neap, need, pale, peal, peel, pout, prize, prose, prove, punt, roam, rove, shout, shove, slope, sloth, slot, spat, spew, spout, spume, streak, stroke, swim, tilt, toot, trope, veal, weal, wilt, woof, wool, yarn, zoom, town, child, feel, land, girl, six, front, voice, age, wife, cost, court, force, love, turn, close, west, job, board, change, south, boy, street, air, miss, keep, car, field, word, half, week, death
+    sydney, los angeles, bucharest, chicago, auckland, london, tokyo, delhi, mumbai, shanghai, moscow, seoul, new york, hanoi, bangkok, berlin, madrid, amsterdam, athens, baghdad, beirut, cairo, budapest, copenhagen, dublin, helsinki, jakarta, jerusalem, kiev, lisbon, manila, oslo, ottawa, paris, prague, rome, stockholm, taipei, jordan, istanbul, toronto, munich, kyoto, seattle, beijing, barcelona, brussels, dubai
+    canada, france, mexico, england, germany, spain, italy, china, japan, russia, brazil, ireland, australia, iraq, finland, argentina, india, switzerland, sweden, africa, chile, britain, iran, portugal, greece, scotland, egypt, israel, peru, belgium, korea, norway, denmark, lebanon, malaysia, poland, taiwan, romania, serbia, singapore, indonesia, taiwan, turkey, vietnam, thailand, philippines, pakistan, netherlands
+    leg, arm, nail, muscle, feet, finger, head, toe, eye, hand, nose, ear, mouth, stomach, heart, knee, neck, brain, hair, elbow, shoulder, chest, spine, hip, lip, thigh, ankle, face, liver, lung, tongue, teeth, torso, wrist, bone, palm, forearm, eyebrow, throat, earlobe, jaw, nostril, forehead, knuckle, heel, skin, cheeks, eyelid
+
+    Remember that the study was conducted in english and the participants are likely to have said the words listed above. That means that any other language that english is not possible. So, if there is any other language than english just return "", i.e. an empty string. 
+    Some of the words might be misspelled but sound the same. Use the words listed above to correct the misspelled words. If you are not sure about a word, just return the original transcription.
+
+
+    I will give you some transcriptions please correct them if you can. Only return the corrected version and nothing else. Do not start with "Sure, here is" or anything but the corrected transcription.
+    """

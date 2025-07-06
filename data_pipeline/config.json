@@ -10,6 +10,7 @@
     "reduction_per_participant": false,
 
     "transcribe_text": true,
+    "post_asr_correction": false,
     "word_cloud": false,
     "ignore_words_in_word_cloud": ["Thank", "Thank you", "Thanks"],
     "text_classification": false,

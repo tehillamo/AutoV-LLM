@@ -35,6 +35,7 @@ def openai_prompting(df, df_col, df_result_col, developer_prompt, model, api_key
     return df
 
 def send_request_with_retry(text, client, model, type=None, developer_prompt=None, max_retries=10):
+    text = str(text)
     for attempt in range(max_retries):
         try:
             if type == "embedding":
@@ -47,13 +48,14 @@ def send_request_with_retry(text, client, model, type=None, developer_prompt=Non
                 response = client.chat.completions.create(
                     model=model,
                     messages=[
-                        {"role": "developer", "content": developer_prompt},
+                        {"role": "system", "content": developer_prompt},
                         {"role": "user", "content": text}
                     ]
                 )
                 return response.choices[0].message.content
         
         except Exception as e:
+            print(e)
             wait_time = (2 ** attempt) + random.uniform(0, 1)  # Exponential backoff
             print(f"Attempt {attempt + 1} failed for prompt: {text[:30]}... Retrying in {wait_time:.2f} sec")
             time.sleep(wait_time)

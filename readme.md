@@ -161,6 +161,7 @@ In the [config file](data_pipeline/config.json) you can specify all parameters.
 | reduction_algorithm  | Algorithm for dimensionality reduction, possible values: ("PCA", "TSNE", "both")  |
 |  dimension |  Dimension to which the embedding dimension should be reduced |
 | transcribe_text  | Perform speech to text (must provide input_path)  |
+| post_asr_correction | Perform a post asr correction (OpenAI API key required because it uses GPT4) |
 |  word_cloud |  Create word cloud |
 | ignore_words_in_word_cloud  |  List of words to ignore in the word cloud |
 | text_classification  |  Perform the text labelling algorithm |

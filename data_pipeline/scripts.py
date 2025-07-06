@@ -15,6 +15,7 @@ from preprocessing import convert_to_tensor
 from keywords import extract_keywords_keybert
 from summarization import summarize
 from openai_script import openai_prompting, openai_embeddings
+from prompts import post_asr_correction_prompt
 #"text_classes": ["certain", "uncertain", "sure", "unsure", "pretty sure", "maybe", "kind of", "i think so", "it feels like", "assume that", "definitely", "absolutely", "confidence", "suspect that must", "cannot be", "im positive", "i know", "i remember"]
 #"text_classes": ["absolutely uncertain", "very uncertain", "somewhat uncertain", "a little uncertain", "a little certain", "somewhat certain", "very certain", "absolutely certain"]
 
@@ -36,7 +37,7 @@ def main():
         print("Transcribing audio...")
         df = transcribe(config['input_path'], config['transcription_model'], args.device)
     else:
-        df = pd.read_csv(config['input_path'], sep=';')
+        df = pd.read_csv(config['input_path'], sep=',')
         if 'transcribed_text' not in df.columns:
             raise ValueError('"transcribed_text" column not found in input file!')
         
@@ -60,9 +61,13 @@ def main():
     behavioral_columns = config['behavioral_columns']
     print(behavioral_columns)
 
-    if config['transcribe_text']:
+    if config['transcribe_text'] and False:
         print("Merging behavioral data...")
         df = merge_behavioral_data(df, config['input_path'], behavioral_columns)
+
+    if config['post_asr_correction']:
+        print("Applying post-ASR correction...")
+        df = openai_prompting(df, "transcribed_text", "transcribed_text_corrected", post_asr_correction_prompt(), config['openai_model'], config['openai_api_key'])
 
     # custom scripts to create needed features
     #df = get_trial_type(df)
