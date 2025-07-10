@@ -133,7 +133,8 @@ All recordings and the trial data will be saved per default to the [`ressources`
 We offer various scripts to automatically assess verbal report recordings. In the following sections, we describe each script's function and how to employ it. Our script is built in a modular fashion such that more scripts can be easily integrated. Furthermore the used machine learning models can also be changed. If you added scripts feel free to open a pull request such that we can add them to our repository.
 
 ### [Speech2Text](data_pipeline/speech2text.py)
-This script transcribes the recordings into text. We are using OpenAI's whisper model [[1]](#references) for this. 
+This script transcribes the recordings into text. We are using OpenAI's whisper model [[1]](#references) for this. However, we also implemented different options (see config options).
+Since many automated speech recognition (ASR) models differ in their initialization and execution we need to write custom initializations and execution functions. In the code we have examples for Whisper, WhisperX and Nvidia Parakeet. This should give a very good overview how to incooperate new ASR models.
 
 ### [Sentence Embeddings](data_pipeline/embeddings.py)
 We use Sentence-BERT [[2]](#references) to obtain embeddings for each transcribed verbal report. 
@@ -156,7 +157,7 @@ In the [config file](data_pipeline/config.json) you can specify all parameters.
 | :----------------: | :------ | 
 | input_path  | Path to the CSV file  |
 |  output_path | Path where the output file should be saved to  |
-|  transcription_model | Which Whisper model to use. See [here]([data_pipeline/config.json](https://github.com/openai/whisper)) for the different options  |
+|  transcription_model | Which ASR model to use. Possible options are [Whisper](https://github.com/openai/whisper) and [WhisperX](https://github.com/m-bain/whisperX) . For Whisper and WhisperX use `whisper-<model>` and `whisperx-<model>` respectively. |
 |  behavioral_columns |  A list of the behavioral columns from jsPsych which should be merged into the output file |
 | reduction_algorithm  | Algorithm for dimensionality reduction, possible values: ("PCA", "TSNE", "both")  |
 |  dimension |  Dimension to which the embedding dimension should be reduced |

@@ -61,7 +61,7 @@ def main():
     behavioral_columns = config['behavioral_columns']
     print(behavioral_columns)
 
-    if config['transcribe_text'] and False:
+    if config['merge_behavioral_data']:
         print("Merging behavioral data...")
         df = merge_behavioral_data(df, config['input_path'], behavioral_columns)
 

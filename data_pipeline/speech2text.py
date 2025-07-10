@@ -2,11 +2,12 @@ import os
 from argparse import ArgumentParser
 import csv
 import json
-import whisper
 import pandas as pd
 from utils import get_uuids
 import re
 import torch
+
+
 
 #print(torch.cuda.is_available(), flush=True)
 
@@ -80,18 +81,31 @@ def _transcribe_audios(paths, model, device):
         config = json.loads(handle.read())
 
     # parameter which model to use
-    model = whisper.load_model(model, device=device, download_root=config["cache_path"])
+    model_name = model
+    if model.startswith('whisper-'):
+        import whisper
+        model_name = model.split('whisper-')[1]
+        model = whisper.load_model(model_name, device=device, download_root=config["cache_path"])
+    elif model.startswith('whisperx-'):
+        import whisperx
+        compute_type = "float32" if torch.cuda.is_available() else "int8"
+        model_name = model.split('whisperx-')[1]
+        model = whisperx.load_model(model_name, device, compute_type=compute_type, download_root=config["cache_path"])
+    else:
+        raise ValueError(f"Model {model} not supported.")
 
-    model_silence_detection, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
-                                model='silero_vad',
-                                force_reload=True,
-                                onnx=False)
 
-    (get_speech_timestamps,
-    save_audio,
-    read_audio,
-    VADIterator,
-    collect_chunks) = utils
+    if config['use_silence_detection']:
+        model_silence_detection, utils = torch.hub.load(repo_or_dir='snakers4/silero-vad',
+                                    model='silero_vad',
+                                    force_reload=True,
+                                    onnx=False)
+
+        (get_speech_timestamps,
+        save_audio,
+        read_audio,
+        VADIterator,
+        collect_chunks) = utils
 
     transcribed = []
 
@@ -101,17 +115,24 @@ def _transcribe_audios(paths, model, device):
         res = ''
         # silence detection
         print(path)
-        wav = read_audio(os.path.join(path), sampling_rate=SAMPLING_RATE)
-        # get speech timestamps from full audio file
-        speech_timestamps = get_speech_timestamps(wav, model_silence_detection, sampling_rate=SAMPLING_RATE)
+        speech_timestamps = [0]
+        if config['use_silence_detection']:
+            wav = read_audio(os.path.join(path), sampling_rate=SAMPLING_RATE)
+            # get speech timestamps from full audio file
+            speech_timestamps = get_speech_timestamps(wav, model_silence_detection, sampling_rate=SAMPLING_RATE)
         if len(speech_timestamps) == 0:
             print(f"no speech detected for {path}")
             res = ''
         else:
             # if files are too small then we get an error. This is a workaround
             try:
-                res = model.transcribe(os.path.join(path), fp16=False, verbose=True)
-                res = res['text']
+                if model_name.startswith('whisper-'):
+                    res = model.transcribe(os.path.join(path), fp16=False, verbose=True)
+                    res = res['text']
+                elif model_name.startswith('whisperx-'):
+                    audio = whisperx.load_audio(os.path.join(path))
+                    result = model.transcribe(audio, batch_size=16)
+                    res = result["segments"][0]['text']
             except Exception as e:
                 print(e)
                 print('File is too small to transcribe (path: ' + path + ')')

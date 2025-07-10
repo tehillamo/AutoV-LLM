@@ -3,14 +3,16 @@
     "output_path": "../output/result.csv",
     "cache_path": "../cache",
 
-    "transcription_model": "large",
+    "transcription_model": "whisperx-base",
     "behavioral_columns": [ "stimulus", "response", "rt", "pair" ],
     "reduction_algorithm": [ "PCA", "TSNE", "both"],
     "dimension": 2,
     "reduction_per_participant": false,
 
     "transcribe_text": true,
+    "use_silence_detection": false,
     "post_asr_correction": false,
+    "merge_behavioral_data": false,
     "word_cloud": false,
     "ignore_words_in_word_cloud": ["Thank", "Thank you", "Thanks"],
     "text_classification": false,
