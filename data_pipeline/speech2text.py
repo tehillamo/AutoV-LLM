@@ -141,7 +141,6 @@ def _transcribe_audios(paths, model, device):
                     res = res['text']
                 elif full_model_name.startswith('whisperx-'):
                     audio = whisperx.load_audio(os.path.join(path))
-                    print('here!!!!!')
                     result = model.transcribe(audio, batch_size=16)
                     res = result["segments"][0]['text']
                 elif full_model_name.startswith('nvidia/parakeet'):
