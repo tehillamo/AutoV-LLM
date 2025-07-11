@@ -153,7 +153,6 @@ python-dotenv==1.1.1
 pytorch-lightning==2.5.2
 pytorch-metric-learning==2.8.1
 pytz==2025.2
-pywin32==306
 PyYAML==6.0.2
 pyzmq==25.1.1
 RapidFuzz==3.13.0
