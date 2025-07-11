@@ -1,5 +1,5 @@
 {
-    "input_path": "../ressources_test",
+    "input_path": "../ressources",
     "output_path": "../output",
     "output_name": "result.csv",
     "cache_path": "../cache",
