@@ -81,19 +81,22 @@ def _transcribe_audios(paths, model, device):
         config = json.loads(handle.read())
 
     # parameter which model to use
-    model_name = model
+    full_model_name = model
 
     # Init/load new ASR/speech-to-text models here
-    if model_name.startswith('whisper-'):
+    if full_model_name.startswith('whisper-'):
         import whisper
-        model_name = model.split('whisper-')[1]
+        model_name = full_model_name.split('whisper-')[1]
         model = whisper.load_model(model_name, device=device, download_root=config["cache_path"])
-    elif model_name.startswith('whisperx-'):
+    elif full_model_name.startswith('whisperx-'):
         import whisperx
         compute_type = "float32" if torch.cuda.is_available() else "int8"
-        model_name = model.split('whisperx-')[1]
+        compute_type = 'int8'
+        torch.backends.cuda.matmul.allow_tf32 = True
+        torch.backends.cudnn.allow_tf32 = True
+        model_name = full_model_name.split('whisperx-')[1]
         model = whisperx.load_model(model_name, device, compute_type=compute_type, download_root=config["cache_path"])
-    elif model_name.startswith('nvidia/parakeet'):
+    elif full_model_name.startswith('nvidia/parakeet'):
         import nemo.collections.asr as nemo_asr
         model = nemo_asr.models.ASRModel.from_pretrained(model_name="nvidia/parakeet-tdt-0.6b-v2").to(device)
 
@@ -133,14 +136,15 @@ def _transcribe_audios(paths, model, device):
             # if files are too small then we get an error. This is a workaround
             try:
                 # Add new ASR/speech-to-text models here (transcirption step)
-                if model_name.startswith('whisper-'):
+                if full_model_name.startswith('whisper-'):
                     res = model.transcribe(os.path.join(path), fp16=False, verbose=True)
                     res = res['text']
-                elif model_name.startswith('whisperx-'):
+                elif full_model_name.startswith('whisperx-'):
                     audio = whisperx.load_audio(os.path.join(path))
+                    print('here!!!!!')
                     result = model.transcribe(audio, batch_size=16)
                     res = result["segments"][0]['text']
-                elif model_name.startswith('nvidia/parakeet'):
+                elif full_model_name.startswith('nvidia/parakeet'):
                     output = model.transcribe([os.path.join(path)])
                     res = output[0].text
             except Exception as e:
