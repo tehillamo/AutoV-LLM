@@ -82,6 +82,8 @@ def _transcribe_audios(paths, model, device):
 
     # parameter which model to use
     model_name = model
+
+    # Init/load new ASR/speech-to-text models here
     if model.startswith('whisper-'):
         import whisper
         model_name = model.split('whisper-')[1]
@@ -126,6 +128,7 @@ def _transcribe_audios(paths, model, device):
         else:
             # if files are too small then we get an error. This is a workaround
             try:
+                # Add new ASR/speech-to-text models here (transcirption step)
                 if model_name.startswith('whisper-'):
                     res = model.transcribe(os.path.join(path), fp16=False, verbose=True)
                     res = res['text']
