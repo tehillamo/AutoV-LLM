@@ -6,7 +6,6 @@ def generate_word_cloud(text, stop_words, output_dir):
     text = repr(text).encode('ascii',errors='ignore').decode()
 
     STOPWORDS.update(stop_words)
-    print(text)
     wordcloud = WordCloud(background_color="white").generate(text)
 
     plt.imshow(wordcloud, interpolation="bilinear")

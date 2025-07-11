@@ -41,7 +41,7 @@ def keyword_similarity_zero_shot(df, keywords, threshold = 0.14, finetuned_model
     indices_with_text = df[df['transcribed_text'].str.strip() != ''].index
 
     # only classify entries with text
-    df['highest_similarity'] = ""
+    df['highest_similarity'] = [("unknown", 0.0)] * len(df)
 
 
     if finetuned_model is not None:
@@ -52,8 +52,7 @@ def keyword_similarity_zero_shot(df, keywords, threshold = 0.14, finetuned_model
         df.loc[indices_with_text, 'highest_similarity'] = pipe(df.loc[indices_with_text, 'transcribed_text'].astype(str).tolist(), candidate_labels=keywords)
         df.loc[indices_with_text, 'highest_similarity'] = df.loc[indices_with_text, 'highest_similarity'].apply(lambda x: (x["labels"][0], x["scores"][0]))
 
-    # remove entries with too low confidence
-    df['highest_similarity'] = df['highest_similarity'].apply(lambda x: x if x[1] > threshold else ('unknown', x[1]))
+    df.loc[indices_with_text, 'highest_similarity'] = df.loc[indices_with_text, 'highest_similarity'].apply(lambda x: x if x[1] > threshold else ('unknown', x[1]))
 
 
     return df

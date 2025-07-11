@@ -95,8 +95,8 @@ def main():
     if config['use_openai_prompting']:
         print("Using OpenAI prompting...")
         df = openai_prompting(df, "transcribed_text", "openai_response", config['developer_prompt'], config['openai_model'], config['openai_api_key'])
-    
-    df.to_csv(os.path.join(config['output_path']), sep=';', index=False)
+
+    df.to_csv(os.path.join(config['output_path'], config['output_name']), sep=';', index=False)
 
 
 

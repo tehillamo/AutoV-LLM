@@ -157,7 +157,8 @@ In the [config file](data_pipeline/config.json) you can specify all parameters.
 | :----------------: | :------ | 
 | input_path  | Path to the CSV file  |
 |  output_path | Path where the output file should be saved to  |
-|  transcription_model | Which ASR model to use. Possible options are [Whisper](https://github.com/openai/whisper) and [WhisperX](https://github.com/m-bain/whisperX) . For Whisper and WhisperX use `whisper-<model>` and `whisperx-<model>` respectively. |
+| output_name| Name of the resulting CSV file in the output path |
+|  transcription_model | Which ASR model to use. Possible options are [Whisper](https://github.com/openai/whisper), [WhisperX](https://github.com/m-bain/whisperX) and [nvidia/parakeet-tdt-0.6b-v2](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v2). For Whisper and WhisperX use `whisper-<model>` and `whisperx-<model>` respectively. For the Nvidia model just use the model name from huggingface (nvidia/parakeet-tdt-0.6b-v2).|
 |  behavioral_columns |  A list of the behavioral columns from jsPsych which should be merged into the output file |
 | reduction_algorithm  | Algorithm for dimensionality reduction, possible values: ("PCA", "TSNE", "both")  |
 |  dimension |  Dimension to which the embedding dimension should be reduced |
