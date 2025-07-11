@@ -91,7 +91,6 @@ def _transcribe_audios(paths, model, device):
     elif full_model_name.startswith('whisperx-'):
         import whisperx
         compute_type = "float32" if torch.cuda.is_available() else "int8"
-        compute_type = 'int8'
         torch.backends.cuda.matmul.allow_tf32 = True
         torch.backends.cudnn.allow_tf32 = True
         model_name = full_model_name.split('whisperx-')[1]
