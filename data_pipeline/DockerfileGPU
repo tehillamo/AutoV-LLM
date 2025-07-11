@@ -21,6 +21,9 @@ RUN pip install --no-cache-dir --upgrade pip
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN pip install whisperx==3.4.2
+RUN pip install numpy==1.26.4
+
 # Ensure that the installed version of torch is compatible with CUDA
 RUN pip install torch==2.7.1+cu118 -f https://download.pytorch.org/whl/torch_stable.html
 RUN pip install torchaudio==2.7.2+cu118 -f https://download.pytorch.org/whl/torch_stable.html
