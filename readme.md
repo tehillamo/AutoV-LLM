@@ -66,9 +66,10 @@ Navigate in your browser to our GitHub repository [https://github.com/tehillamo/
  3. We would recommend to create a virtual environment with `python -m venv venv`. If you do not want to do that skip to step 5
  4. Start virtual environment `source venv/bin/activate`
  5. Run `pip install -r requirements.txt` to install python dependencies
- 6. Install [ffmpeg](https://www.ffmpeg.org/download.html) (required version >=4.1 and <= 4.4)
+ 6. Please run after that `pip install whisperx==3.4.2` and `pip install numpy==1.26.4` in this order to avoid version conflicts.
+ 7. Install [ffmpeg](https://www.ffmpeg.org/download.html) (required version >=4.1 and <= 4.4)
     * MacOS: `brew install ffmpeg@4` and `brew link ffmpeg@4`
- 7. Start the corresponding script using `python -u scripts.py`
+ 8. Start the corresponding script using `python -u scripts.py`
 
 ## Setup Production (Server)
 ### Prerequisites
