@@ -154,7 +154,7 @@ We use a zero-shot classification algorithm to find the most problable text labe
 In the last step we merge the data obtained from the study with the earlier computed data (transcribed text, embeddings, lower dimensional embeddings).
 
 ### Input Configuration
-In the [config file](data_pipeline/config.json) you can specify all parameters.
+In the [config file](data_pipeline/config.json) you can specify all parameters. Note that if you change `input_path`, `output_path` and `cache_path`, then you must change this also in the docker-compose file.
 | Parameter | Explanation |
 | :----------------: | :------ | 
 | input_path  | Path to the CSV file  |
