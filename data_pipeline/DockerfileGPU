@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu20.04
+FROM nvidia/cuda:12.6.0-runtime-ubuntu20.04
 
 WORKDIR /usr/src/app
 
@@ -11,22 +11,35 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     libsndfile1 \
     ffmpeg \
+    software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
+RUN add-apt-repository ppa:deadsnakes/ppa
 
-RUN apt-get update && apt-get install -y python3.10 python3-pip
-RUN pip install --no-cache-dir --upgrade pip
+RUN apt-get update && apt-get install -y python3.10 python3.10-dev python3.10-distutils python3-setuptools
+
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.10 1
+
+RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
+    && python get-pip.py \
+    && rm get-pip.py
+   
+RUN python -m pip install numpy==1.26.4
+RUN python -m pip install typing-extensions==3.10.0.0
+RUN python -m pip install --no-cache-dir --upgrade pip
 
 
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN python -m pip install --no-cache-dir -r requirements.txt
 
-RUN pip install whisperx==3.4.2
-RUN pip install numpy==1.26.4
+RUN python -m pip install whisperx==3.4.2
+RUN python -m pip install numpy==1.26.4
+
 
 # Ensure that the installed version of torch is compatible with CUDA
-RUN pip install torch==2.7.1+cu118 -f https://download.pytorch.org/whl/torch_stable.html
-RUN pip install torchaudio==2.7.2+cu118 -f https://download.pytorch.org/whl/torch_stable.html
+RUN python -m pip install torch==2.7.1+cu126 -f https://download.pytorch.org/whl/torch_stable.html --index-url https://download.pytorch.org/whl/cu126
+RUN python -m pip install torchaudio==2.7.1+cu126 -f https://download.pytorch.org/whl/torch_stable.html --index-url https://download.pytorch.org/whl/cu126
+RUN python -m pip install torchvision==0.22.1+cu126 -f https://download.pytorch.org/whl/torch_stable.html --index-url https://download.pytorch.org/whl/cu126
 
 COPY . .
-CMD ["python3", "-u", "scripts.py", "--device", "cuda"]
+CMD ["python", "-u", "scripts.py", "--device", "cuda"]

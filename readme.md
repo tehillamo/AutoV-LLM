@@ -61,6 +61,7 @@ Navigate in your browser to our GitHub repository [https://github.com/tehillamo/
  5. Available in browser under `http:://localhost:8000`
 
 ### Run the Data-Pipeline 
+Please install the necessary cuda backend if you plan to use cuda. The code is based on cuda 12.6.
  1. Open your terminal and navigate to our framework folder
  2. Run `cd AUTOV-LLM/data_pipeline` to step into the data pipeline folder
  3. We would recommend to create a virtual environment with `python -m venv venv`. If you do not want to do that skip to step 5
